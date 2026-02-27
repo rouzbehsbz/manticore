@@ -1,6 +1,7 @@
 package network
 
 import (
+	"log"
 	"net/http"
 
 	"github.com/gorilla/websocket"
@@ -30,7 +31,22 @@ func NewServer() *Server {
 	}
 }
 
-func (s *Server) Accept(w http.ResponseWriter, r *http.Request) {
+func (s *Server) Listen(addr string) {
+	mux := http.NewServeMux()
+
+	mux.HandleFunc("/ws", s.accept)
+
+	server := &http.Server{
+		Addr:    addr,
+		Handler: mux,
+	}
+
+	if err := server.ListenAndServe(); err != nil {
+		log.Fatal(err)
+	}
+}
+
+func (s *Server) accept(w http.ResponseWriter, r *http.Request) {
 	conn, err := s.upgrader.Upgrade(w, r, nil)
 	if err != nil {
 		return

@@ -1,0 +1,78 @@
+[gd_scene format=3 uid="uid://bameddpdber7u"]
+
+[node name="MainMenu" type="Control" unique_id=981353567]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1184200568]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 12
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer" unique_id=1205037633]
+layout_mode = 2
+
+[node name="Spacer" type="Control" parent="MarginContainer/VBoxContainer" unique_id=1649000868]
+custom_minimum_size = Vector2(0, 122)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer" unique_id=681369676]
+layout_mode = 2
+theme_override_font_sizes/font_size = 75
+text = "Manticore"
+horizontal_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer" unique_id=139259418]
+layout_mode = 2
+alignment = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer" unique_id=1372243941]
+custom_minimum_size = Vector2(250, 0)
+layout_mode = 2
+alignment = 1
+
+[node name="Username" type="VBoxContainer" parent="MarginContainer/HBoxContainer/VBoxContainer" unique_id=751128482]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Label" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer/Username" unique_id=646793509]
+layout_mode = 2
+text = "Username"
+
+[node name="LineEdit" type="LineEdit" parent="MarginContainer/HBoxContainer/VBoxContainer/Username" unique_id=1827092657]
+layout_mode = 2
+
+[node name="Password" type="VBoxContainer" parent="MarginContainer/HBoxContainer/VBoxContainer" unique_id=1886621847]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Label" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer/Password" unique_id=1595116792]
+layout_mode = 2
+text = "Password"
+
+[node name="LineEdit" type="LineEdit" parent="MarginContainer/HBoxContainer/VBoxContainer/Password" unique_id=1830306323]
+layout_mode = 2
+secret = true
+
+[node name="Spacer" type="Control" parent="MarginContainer/HBoxContainer/VBoxContainer" unique_id=170295314]
+custom_minimum_size = Vector2(0, 39)
+layout_mode = 2
+
+[node name="LoginButton" type="Button" parent="MarginContainer/HBoxContainer/VBoxContainer" unique_id=1543400531]
+layout_mode = 2
+text = "Login"
+
+[node name="RegisterButton" type="Button" parent="MarginContainer/HBoxContainer/VBoxContainer" unique_id=462783370]
+layout_mode = 2
+text = "Register"
