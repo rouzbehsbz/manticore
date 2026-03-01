@@ -11,6 +11,11 @@ const (
 	SendBufferSize = 256
 )
 
+type ReceivedPacket struct {
+	Packet  *protocol.Packet
+	Session *Session
+}
+
 type Session struct {
 	id      uint32
 	conn    *websocket.Conn
@@ -65,11 +70,17 @@ func (s *Session) receiveLoop() {
 				continue
 			}
 
-			if isNoneBlocking {
-				s.manager.NonBlocking <- packet
-			} else {
-				s.manager.Blocking <- packet
+			receivedPacket := ReceivedPacket{
+				Packet:  packet,
+				Session: s,
 			}
+
+			if isNoneBlocking {
+				s.manager.NonBlocking <- receivedPacket
+				continue
+			}
+
+			s.manager.Blocking <- receivedPacket
 		}
 	}
 }

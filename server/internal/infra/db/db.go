@@ -1,4 +1,4 @@
-package infra
+package db
 
 import (
 	"context"
@@ -12,7 +12,7 @@ type Db struct {
 	Q *sources.Queries
 }
 
-func NewPostgresService(host string, port uint16, username, password, databaseName string, maxConnections int) (*Db, error) {
+func NewDb(host string, port uint16, username, password, databaseName string, maxConnections int) (*Db, error) {
 	databaseUrl := fmt.Sprintf("postgres://%s:%s@%s:%d/%s", username, password, host, port, databaseName)
 
 	config, err := pgxpool.ParseConfig(databaseUrl)

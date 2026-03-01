@@ -15,7 +15,7 @@ const (
 
 type Server struct {
 	upgrader        websocket.Upgrader
-	sessionsManager *session.SessionManager
+	SessionsManager *session.SessionManager
 }
 
 func NewServer() *Server {
@@ -27,7 +27,7 @@ func NewServer() *Server {
 				return true
 			},
 		},
-		sessionsManager: session.NewSessionManager(),
+		SessionsManager: session.NewSessionManager(),
 	}
 }
 
@@ -52,5 +52,5 @@ func (s *Server) accept(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	s.sessionsManager.Insert(conn)
+	s.SessionsManager.Insert(conn)
 }

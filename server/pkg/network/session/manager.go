@@ -4,7 +4,6 @@ import (
 	"sync/atomic"
 
 	"github.com/gorilla/websocket"
-	"github.com/rouzbehsbz/manticore/server/pkg/network/protocol"
 	"github.com/rouzbehsbz/manticore/server/pkg/util"
 )
 
@@ -17,16 +16,16 @@ type SessionManager struct {
 	sessions  *util.SyncMap[uint32, *Session]
 	idCounter atomic.Uint32
 
-	Blocking    chan *protocol.Packet
-	NonBlocking chan *protocol.Packet
+	Blocking    chan ReceivedPacket
+	NonBlocking chan ReceivedPacket
 }
 
 func NewSessionManager() *SessionManager {
 	return &SessionManager{
 		sessions:    util.NewSyncMap[uint32, *Session](),
 		idCounter:   atomic.Uint32{},
-		Blocking:    make(chan *protocol.Packet, BlockingBufferSize),
-		NonBlocking: make(chan *protocol.Packet, NoneBlockingBufferSize),
+		Blocking:    make(chan ReceivedPacket, BlockingBufferSize),
+		NonBlocking: make(chan ReceivedPacket, NoneBlockingBufferSize),
 	}
 }
 
