@@ -1,6 +1,8 @@
 package protocol
 
-import "google.golang.org/protobuf/proto"
+import (
+	"google.golang.org/protobuf/proto"
+)
 
 const (
 	LoginRequestPacketId uint8 = iota
@@ -19,6 +21,30 @@ var PacketRegistry = map[uint8]proto.Message{
 	LoginResponsePacketId:    &LoginResponse{},
 	RegisterRequestPacketId:  &RegisterRequest{},
 	RegisterResponsePacketId: &RegisterResponse{},
+}
+
+func BuildRegisterResponsePacket(ok bool, msg string) *Packet {
+	return &Packet{
+		Id: uint32(RegisterResponsePacketId),
+		Payload: &Packet_RegisterResponse{
+			RegisterResponse: &RegisterResponse{
+				Ok:  ok,
+				Msg: msg,
+			},
+		},
+	}
+}
+
+func BuildLoginResponsePacket(ok bool, msg string) *Packet {
+	return &Packet{
+		Id: uint32(LoginResponsePacketId),
+		Payload: &Packet_LoginResponse{
+			LoginResponse: &LoginResponse{
+				Ok:  ok,
+				Msg: msg,
+			},
+		},
+	}
 }
 
 var PacketTypeRegistry = map[uint8]uint8{
