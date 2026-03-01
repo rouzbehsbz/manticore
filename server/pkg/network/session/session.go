@@ -60,7 +60,16 @@ func (s *Session) receiveLoop() {
 		}
 
 		for _, packet := range frame.Packets() {
-			s.manager.receive <- packet
+			isNoneBlocking, ok := protocol.IsNoneBlockingPacketType(uint8(packet.Id))
+			if !ok {
+				continue
+			}
+
+			if isNoneBlocking {
+				s.manager.NonBlocking <- packet
+			} else {
+				s.manager.Blocking <- packet
+			}
 		}
 	}
 }

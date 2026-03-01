@@ -9,21 +9,24 @@ import (
 )
 
 const (
-	ReceiveBufferSize = 256
+	BlockingBufferSize     = 256
+	NoneBlockingBufferSize = 256
 )
 
 type SessionManager struct {
 	sessions  *util.SyncMap[uint32, *Session]
 	idCounter atomic.Uint32
 
-	receive chan *protocol.Packet
+	Blocking    chan *protocol.Packet
+	NonBlocking chan *protocol.Packet
 }
 
 func NewSessionManager() *SessionManager {
 	return &SessionManager{
-		sessions:  util.NewSyncMap[uint32, *Session](),
-		idCounter: atomic.Uint32{},
-		receive:   make(chan *protocol.Packet, ReceiveBufferSize),
+		sessions:    util.NewSyncMap[uint32, *Session](),
+		idCounter:   atomic.Uint32{},
+		Blocking:    make(chan *protocol.Packet, BlockingBufferSize),
+		NonBlocking: make(chan *protocol.Packet, NoneBlockingBufferSize),
 	}
 }
 

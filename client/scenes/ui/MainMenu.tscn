@@ -49,6 +49,7 @@ theme_override_constants/separation = 0
 [node name="Label" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer/Username" unique_id=646793509]
 layout_mode = 2
 text = "Username"
+horizontal_alignment = 1
 
 [node name="LineEdit" type="LineEdit" parent="MarginContainer/HBoxContainer/VBoxContainer/Username" unique_id=1827092657]
 layout_mode = 2
@@ -60,6 +61,7 @@ theme_override_constants/separation = 0
 [node name="Label" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer/Password" unique_id=1595116792]
 layout_mode = 2
 text = "Password"
+horizontal_alignment = 1
 
 [node name="LineEdit" type="LineEdit" parent="MarginContainer/HBoxContainer/VBoxContainer/Password" unique_id=1830306323]
 layout_mode = 2
@@ -72,6 +74,15 @@ layout_mode = 2
 [node name="LoginButton" type="Button" parent="MarginContainer/HBoxContainer/VBoxContainer" unique_id=1543400531]
 layout_mode = 2
 text = "Login"
+
+[node name="CheckBox" type="CheckBox" parent="MarginContainer/HBoxContainer/VBoxContainer" unique_id=1235624585]
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "Remember Username"
+
+[node name="Spacer2" type="Control" parent="MarginContainer/HBoxContainer/VBoxContainer" unique_id=2020258020]
+custom_minimum_size = Vector2(0, 33)
+layout_mode = 2
 
 [node name="RegisterButton" type="Button" parent="MarginContainer/HBoxContainer/VBoxContainer" unique_id=462783370]
 layout_mode = 2

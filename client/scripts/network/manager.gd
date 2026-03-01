@@ -17,6 +17,7 @@ func _process(delta: float) -> void:
 		return
 	
 	session.poll()
+	
 	session.flush()
 
 func _on_connect() -> void:

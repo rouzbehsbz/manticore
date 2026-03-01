@@ -1,8 +1,8 @@
 class_name Session
 extends RefCounted
 
-const Pb = preload("res://addons/network/packets.gd")
-const Frame = preload("res://addons/network/frame.gd")
+const Pb = preload("res://scripts/network/packets.gd")
+const Frame = preload("res://scripts/network/frame.gd")
 
 signal connected()
 signal disconnected()

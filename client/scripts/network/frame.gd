@@ -1,7 +1,7 @@
 class_name Frame
 extends RefCounted
 
-const Pb = preload("res://addons/network/packets.gd")
+const Pb = preload("res://scripts/network/packets.gd")
 
 var packets: Array[Pb.Packet] = []
 
