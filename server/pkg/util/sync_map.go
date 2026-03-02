@@ -35,3 +35,12 @@ func (s *SyncMap[K, V]) Delete(key K) {
 
 	delete(s.unsafeMap, key)
 }
+
+func (s *SyncMap[K, V]) Iter(cb func(k K, v V)) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	for k, v := range s.unsafeMap {
+		cb(k, v)
+	}
+}

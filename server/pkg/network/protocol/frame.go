@@ -32,12 +32,12 @@ func BuildFrame(data []byte) (*Frame, error) {
 			return nil, err
 		}
 
-		var packet *Packet
-		if err := proto.Unmarshal(rawPacket, packet); err != nil {
+		var packet Packet
+		if err := proto.Unmarshal(rawPacket, &packet); err != nil {
 			return nil, err
 		}
 
-		packets = append(packets, packet)
+		packets = append(packets, &packet)
 	}
 
 	return &Frame{
@@ -71,12 +71,12 @@ func (f *Frame) Bytes() ([]byte, error) {
 		}
 
 		length := uint16(len(bytes))
-		buf := make([]byte, length)
+		rawPacket := make([]byte, length+2)
 
-		binary.BigEndian.PutUint16(buf[:2], length)
-		copy(buf[2:], bytes)
+		binary.BigEndian.PutUint16(rawPacket[:2], length)
+		copy(rawPacket[2:], bytes)
 
-		buf = append(buf, buf...)
+		buf = append(buf, rawPacket...)
 	}
 
 	return buf, nil

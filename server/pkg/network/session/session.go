@@ -24,7 +24,7 @@ type Session struct {
 	frameBuf *protocol.Frame
 	mu       sync.Mutex
 
-	send chan *protocol.Frame
+	send chan protocol.Frame
 
 	closeOnce sync.Once
 }
@@ -35,7 +35,7 @@ func NewSession(id uint32, conn *websocket.Conn, manager *SessionManager) *Sessi
 		conn:      conn,
 		frameBuf:  protocol.NewFrame(),
 		mu:        sync.Mutex{},
-		send:      make(chan *protocol.Frame, SendBufferSize),
+		send:      make(chan protocol.Frame, SendBufferSize),
 		manager:   manager,
 		closeOnce: sync.Once{},
 	}
@@ -116,7 +116,7 @@ func (s *Session) Flush() {
 		return
 	}
 
-	s.send <- s.frameBuf
+	s.send <- *s.frameBuf
 	s.frameBuf.Empty()
 }
 

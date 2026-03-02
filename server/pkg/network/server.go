@@ -31,6 +31,15 @@ func NewServer() *Server {
 	}
 }
 
+func (s *Server) accept(w http.ResponseWriter, r *http.Request) {
+	conn, err := s.upgrader.Upgrade(w, r, nil)
+	if err != nil {
+		return
+	}
+
+	s.SessionsManager.Insert(conn)
+}
+
 func (s *Server) Listen(addr string) {
 	mux := http.NewServeMux()
 
@@ -44,13 +53,4 @@ func (s *Server) Listen(addr string) {
 	if err := server.ListenAndServe(); err != nil {
 		log.Fatal(err)
 	}
-}
-
-func (s *Server) accept(w http.ResponseWriter, r *http.Request) {
-	conn, err := s.upgrader.Upgrade(w, r, nil)
-	if err != nil {
-		return
-	}
-
-	s.SessionsManager.Insert(conn)
 }
