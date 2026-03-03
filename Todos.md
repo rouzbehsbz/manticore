@@ -1,0 +1,2 @@
+- Server-side input validations
+- Client-side input validations
