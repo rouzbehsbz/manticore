@@ -1,43 +1,48 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"runtime"
 	"time"
 
+	"github.com/rouzbehsbz/manticore/server/internal/common"
 	"github.com/rouzbehsbz/manticore/server/internal/gameplay"
 	"github.com/rouzbehsbz/manticore/server/internal/gameplay/account"
+	"github.com/rouzbehsbz/manticore/server/internal/infra/db"
 	"github.com/rouzbehsbz/manticore/server/pkg/network"
 	"github.com/rouzbehsbz/manticore/server/pkg/network/protocol"
 	"github.com/rouzbehsbz/manticore/server/pkg/pool"
 )
 
 func main() {
-	// isDevMode := flag.Bool("dev", true, "Run program in dev mode")
-	// flag.Parse()
+	isDevMode := flag.Bool("dev", true, "Run program in dev mode")
+	flag.Parse()
 
-	// config, err := common.NewConfig(*isDevMode)
-	// if err != nil {
-	// 	panic(err)
-	// }
+	config, err := common.NewConfig(*isDevMode)
+	if err != nil {
+		panic(err)
+	}
 
-	// db, err := db.NewDb(
-	// 	config.DbHost,
-	// 	config.DbPort,
-	// 	config.DbUsername,
-	// 	config.DbPassword,
-	// 	config.DbName,
-	// 	config.DbMaxConnections,
-	// )
-	// if err != nil {
-	// 	panic(err)
-	// }
+	numCpus := runtime.NumCPU()
 
-	blockingPool := pool.NewPool(runtime.NumCPU())
+	db, err := db.NewDb(
+		config.DbHost,
+		config.DbPort,
+		config.DbUsername,
+		config.DbPassword,
+		config.DbName,
+		numCpus,
+	)
+	if err != nil {
+		panic(err)
+	}
+
+	blockingPool := pool.NewPool(numCpus)
 
 	dispatcher := gameplay.NewDispatcher()
-	dispatcher.Register(protocol.RegisterRequestPacketId, account.NewRegisterHandler(nil))
-	dispatcher.Register(protocol.LoginRequestPacketId, account.NewLoginHandler(nil))
+	dispatcher.Register(protocol.RegisterRequestPacketId, account.NewRegisterHandler(db))
+	dispatcher.Register(protocol.LoginRequestPacketId, account.NewLoginHandler(db))
 
 	server := network.NewServer()
 
@@ -57,6 +62,6 @@ func main() {
 		}
 	}()
 
-	addr := fmt.Sprintf("%s:%d", "0.0.0.0", 3000)
+	addr := fmt.Sprintf("%s:%d", config.Host, config.Port)
 	server.Listen(addr)
 }
