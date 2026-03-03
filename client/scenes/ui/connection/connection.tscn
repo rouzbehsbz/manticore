@@ -1,0 +1,5 @@
+[gd_scene format=3 uid="uid://nra82l330pwe"]
+
+[node name="Connection" type="Control" unique_id=1815555390]
+layout_mode = 3
+anchors_preset = 0

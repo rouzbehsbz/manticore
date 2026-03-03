@@ -25,7 +25,7 @@ static func build_frame(bytes: PackedByteArray) -> Frame:
 		if length == 0:
 			push_error("invalid zero length packet")
 			break
-			
+
 		if reader.get_available_bytes() < length:
 			push_error("packet length is not compatible with packet data")
 			break
@@ -33,19 +33,21 @@ static func build_frame(bytes: PackedByteArray) -> Frame:
 		var raw_packet = reader.get_data(length)
 		var packet = Pb.Packet.new()
 		
-		var err = packet.from_bytes(raw_packet)
+		var err = packet.from_bytes(raw_packet[1])
 		if err != Pb.PB_ERR.NO_ERRORS:
 			push_error("failed to parse raw packet data")
 			break
 			
 		frame.packets.append(packet)
 	
+	
+	
 	return frame
 
 func append(packet: Pb.Packet) -> void:
 	packets.append(packet)
 
-func bytes() -> PackedByteArray:
+func to_bytes() -> PackedByteArray:
 	var writer = StreamPeerBuffer.new()
 	writer.big_endian = true
 	

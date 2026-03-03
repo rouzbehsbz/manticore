@@ -1,5 +1,7 @@
 [gd_scene format=3 uid="uid://bameddpdber7u"]
 
+[ext_resource type="Script" uid="uid://cd5ojc424v7s" path="res://scenes/ui/main_menu/main_menu.gd" id="1_vjtqc"]
+
 [node name="MainMenu" type="Control" unique_id=981353567]
 layout_mode = 3
 anchors_preset = 15
@@ -7,6 +9,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_vjtqc")
 
 [node name="MarginContainer" type="MarginContainer" parent="." unique_id=1184200568]
 layout_mode = 1
@@ -51,7 +54,8 @@ layout_mode = 2
 text = "Username"
 horizontal_alignment = 1
 
-[node name="LineEdit" type="LineEdit" parent="MarginContainer/HBoxContainer/VBoxContainer/Username" unique_id=1827092657]
+[node name="UsernameInput" type="LineEdit" parent="MarginContainer/HBoxContainer/VBoxContainer/Username" unique_id=1827092657]
+unique_name_in_owner = true
 layout_mode = 2
 
 [node name="Password" type="VBoxContainer" parent="MarginContainer/HBoxContainer/VBoxContainer" unique_id=1886621847]
@@ -63,7 +67,8 @@ layout_mode = 2
 text = "Password"
 horizontal_alignment = 1
 
-[node name="LineEdit" type="LineEdit" parent="MarginContainer/HBoxContainer/VBoxContainer/Password" unique_id=1830306323]
+[node name="PasswordInput" type="LineEdit" parent="MarginContainer/HBoxContainer/VBoxContainer/Password" unique_id=1830306323]
+unique_name_in_owner = true
 layout_mode = 2
 secret = true
 
@@ -72,6 +77,7 @@ custom_minimum_size = Vector2(0, 39)
 layout_mode = 2
 
 [node name="LoginButton" type="Button" parent="MarginContainer/HBoxContainer/VBoxContainer" unique_id=1543400531]
+unique_name_in_owner = true
 layout_mode = 2
 text = "Login"
 
@@ -85,5 +91,9 @@ custom_minimum_size = Vector2(0, 33)
 layout_mode = 2
 
 [node name="RegisterButton" type="Button" parent="MarginContainer/HBoxContainer/VBoxContainer" unique_id=462783370]
+unique_name_in_owner = true
 layout_mode = 2
 text = "Register"
+
+[connection signal="pressed" from="MarginContainer/HBoxContainer/VBoxContainer/LoginButton" to="." method="_on_login_button_pressed"]
+[connection signal="pressed" from="MarginContainer/HBoxContainer/VBoxContainer/RegisterButton" to="." method="_on_register_button_pressed"]
