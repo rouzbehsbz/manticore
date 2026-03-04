@@ -63,9 +63,7 @@ func write(packet: Pb.Packet) -> void:
 	_send_frame.append(packet)
 
 func flush() -> void:
-	if _send_frame.size() == 0:
-		return
-	if _last_state != WebSocketPeer.STATE_OPEN:
+	if _send_frame.size() == 0 or _last_state != WebSocketPeer.STATE_OPEN:
 		return
 	
 	var bytes = _send_frame.to_bytes()

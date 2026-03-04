@@ -1,4 +1,4 @@
-package gameplay
+package network
 
 import "github.com/rouzbehsbz/manticore/server/pkg/network/session"
 

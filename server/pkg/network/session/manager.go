@@ -36,8 +36,8 @@ func (s *SessionManager) Insert(conn *websocket.Conn) {
 	s.sessions.Insert(id, session)
 }
 
-func (s *SessionManager) Flush() {
+func (s *SessionManager) FlushAll() {
 	s.sessions.Iter(func(k uint32, v *Session) {
-		v.Flush()
+		v.flush()
 	})
 }

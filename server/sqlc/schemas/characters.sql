@@ -1,0 +1,10 @@
+CREATE TABLE IF NOT EXISTS "characters" (
+    id SERIAL PRIMARY KEY,
+    account_id INTEGER NOT NULL,
+    nickname VARCHAR(20) NOT NULL UNIQUE,
+    level SMALLINT DEFAULT 1 CHECK (level >= 1),
+    xp INTEGER DEFAULT 0 CHECK (xp >= 0)
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT fk_account FOREIGN KEY (account_id) REFERENCES accounts(id) ON DELETE RESTRICT,
+)

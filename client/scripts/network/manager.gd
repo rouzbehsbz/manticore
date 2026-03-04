@@ -33,10 +33,9 @@ func _on_connect() -> void:
 
 func _on_disconnect() -> void:
 	print("Disconnected")
+	print("Reconnecting...")
 	reconnect_timer.start(reconnect_delay)
 
 func _attempt_reconnect() -> void:
-	print("Reconnecting...")
-	
 	session.connect_to(url)
 	reconnect_timer.stop()

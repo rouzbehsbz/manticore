@@ -4,7 +4,7 @@ ifneq (,$(wildcard .env))
 endif
 
 SQLC_CONFIG_PATH=./server/sqlc/config.yaml
-DATABASE_URL=postgres://$(POSTGRES_USERNAME):$(POSTGRES_PASSWORD)@$(POSTGRES_HOST):$(POSTGRES_PORT)/$(POSTGRES_DATABASE_NAME)?sslmode=disable
+DATABASE_URL=postgres://$(DB_USERNAME):$(DB_PASSWORD)@$(DB_HOST):$(DB_PORT)/$(DB_NAME)?sslmode=disable
 
 gen-server-proto:
 	@echo "Generating server protobuf ..."

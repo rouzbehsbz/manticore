@@ -108,7 +108,7 @@ func (s *Session) Write(packet *protocol.Packet) {
 	s.frameBuf.Append(packet)
 }
 
-func (s *Session) Flush() {
+func (s *Session) flush() {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 

@@ -24,44 +24,41 @@ func NewRegisterHandler(db *db.Db) *RegisterHandler {
 	}
 }
 
+func (r *RegisterHandler) sendResponse(session *session.Session, ok bool, msg string) {
+	session.Write(
+		protocol.BuildRegisterResponsePacket(
+			ok,
+			msg,
+		),
+	)
+}
+
 func (r *RegisterHandler) Handle(rp session.ReceivedPacket) {
 	ctx := context.Background()
 	payload := rp.Packet.Payload.(*protocol.Packet_RegisterRequest)
 
-	_, err := r.db.Q.GetAccountByUsername(ctx, payload.RegisterRequest.Username)
-	if err == nil {
-		rp.Session.Write(
-			protocol.BuildRegisterResponsePacket(
-				false,
-				"This username is already taken.",
-			),
-		)
+	username := payload.RegisterRequest.Username
+	password := payload.RegisterRequest.Password
+	if !isUsernameValid(username) || !isPasswordValid(password) {
+		r.sendResponse(rp.Session, false, "Username or password is invalid.")
 		return
 	}
 
-	bytes := []byte(payload.RegisterRequest.Password)
+	_, err := r.db.Q.GetAccountByUsername(ctx, username)
+	if err == nil {
+		r.sendResponse(rp.Session, false, "This username is already taken.")
+		return
+	}
+
+	bytes := []byte(password)
 	hashedPassword, _ := bcrypt.GenerateFromPassword(bytes, PasswordSalt)
 
-	_, err = r.db.Q.CreateAccount(ctx, sources.CreateAccountParams{
-		Username: payload.RegisterRequest.Username,
+	_, _ = r.db.Q.CreateAccount(ctx, sources.CreateAccountParams{
+		Username: username,
 		Password: string(hashedPassword),
 	})
-	if err != nil {
-		rp.Session.Write(
-			protocol.BuildRegisterResponsePacket(
-				false,
-				err.Error(),
-			),
-		)
-		return
-	}
 
-	rp.Session.Write(
-		protocol.BuildRegisterResponsePacket(
-			true,
-			"Your account has been registered successfully.",
-		),
-	)
+	r.sendResponse(rp.Session, true, "Your account has been registered successfully.")
 }
 
 type LoginHandler struct {
@@ -74,35 +71,44 @@ func NewLoginHandler(db *db.Db) *LoginHandler {
 	}
 }
 
+func (l *LoginHandler) sendResponse(session *session.Session, ok bool, msg string) {
+	session.Write(
+		protocol.BuildLoginResponsePacket(
+			ok,
+			msg,
+		),
+	)
+}
+
 func (l *LoginHandler) Handle(rp session.ReceivedPacket) {
 	ctx := context.Background()
 	payload := rp.Packet.Payload.(*protocol.Packet_LoginRequest)
 
-	acc, err := l.db.Q.GetAccountByUsername(ctx, payload.LoginRequest.Username)
+	username := payload.LoginRequest.Username
+	password := payload.LoginRequest.Password
+	if !isUsernameValid(username) || !isPasswordValid(password) {
+		l.sendResponse(rp.Session, false, "Username or password is invalid.")
+		return
+	}
+
+	acc, err := l.db.Q.GetAccountByUsername(ctx, username)
 	if err != nil {
-		rp.Session.Write(
-			protocol.BuildLoginResponsePacket(
-				false,
-				"Username or password is incorrect.",
-			),
-		)
+		l.sendResponse(rp.Session, false, "Username or password is incorrect.")
 		return
 	}
 
-	if err := bcrypt.CompareHashAndPassword([]byte(acc.Password), []byte(payload.LoginRequest.Password)); err != nil {
-		rp.Session.Write(
-			protocol.BuildLoginResponsePacket(
-				false,
-				"Username or password is incorrect.",
-			),
-		)
+	if err := bcrypt.CompareHashAndPassword([]byte(acc.Password), []byte(password)); err != nil {
+		l.sendResponse(rp.Session, false, "Username or password is incorrect.")
 		return
 	}
 
-	rp.Session.Write(
-		protocol.BuildLoginResponsePacket(
-			true,
-			"You have logged in successfully.",
-		),
-	)
+	l.sendResponse(rp.Session, true, "You have logged in successfully.")
+}
+
+func isUsernameValid(username string) bool {
+	return true
+}
+
+func isPasswordValid(password string) bool {
+	return true
 }
