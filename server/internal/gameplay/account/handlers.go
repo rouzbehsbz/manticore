@@ -2,6 +2,7 @@ package account
 
 import (
 	"context"
+	"errors"
 
 	"github.com/rouzbehsbz/manticore/server/internal/infra/db"
 	"github.com/rouzbehsbz/manticore/server/internal/infra/db/sources"
@@ -39,12 +40,15 @@ func (r *RegisterHandler) Handle(rp session.ReceivedPacket) {
 
 	username := payload.RegisterRequest.Username
 	password := payload.RegisterRequest.Password
-	if !isUsernameValid(username) || !isPasswordValid(password) {
-		r.sendResponse(rp.Session, false, "Username or password is invalid.")
-		return
+
+	var err error
+	err = isUsernameValid(username)
+	err = isPasswordValid(username)
+	if err != nil {
+		r.sendResponse(rp.Session, false, err.Error())
 	}
 
-	_, err := r.db.Q.GetAccountByUsername(ctx, username)
+	_, err = r.db.Q.GetAccountByUsername(ctx, username)
 	if err == nil {
 		r.sendResponse(rp.Session, false, "This username is already taken.")
 		return
@@ -86,9 +90,12 @@ func (l *LoginHandler) Handle(rp session.ReceivedPacket) {
 
 	username := payload.LoginRequest.Username
 	password := payload.LoginRequest.Password
-	if !isUsernameValid(username) || !isPasswordValid(password) {
-		l.sendResponse(rp.Session, false, "Username or password is invalid.")
-		return
+
+	var err error
+	err = isUsernameValid(username)
+	err = isPasswordValid(username)
+	if err != nil {
+		l.sendResponse(rp.Session, false, err.Error())
 	}
 
 	acc, err := l.db.Q.GetAccountByUsername(ctx, username)
@@ -105,10 +112,22 @@ func (l *LoginHandler) Handle(rp session.ReceivedPacket) {
 	l.sendResponse(rp.Session, true, "You have logged in successfully.")
 }
 
-func isUsernameValid(username string) bool {
-	return true
+func isUsernameValid(username string) error {
+	if len(username) < 3 || len(username) > 50 {
+		return errors.New("Username length must be between 3 and 50 characters")
+	}
+
+	if !UsernameRegex.MatchString(username) {
+		return errors.New("Username must not contain illigal characters")
+	}
+
+	return nil
 }
 
-func isPasswordValid(password string) bool {
-	return true
+func isPasswordValid(password string) error {
+	if len(password) < 8 || len(password) > 128 {
+		return errors.New("Password length must be at least 8 characters.")
+	}
+
+	return nil
 }

@@ -8,6 +8,7 @@ import (
 
 	"github.com/rouzbehsbz/manticore/server/internal/common"
 	"github.com/rouzbehsbz/manticore/server/internal/gameplay/account"
+	"github.com/rouzbehsbz/manticore/server/internal/gameplay/combat"
 	"github.com/rouzbehsbz/manticore/server/internal/gameplay/core"
 	"github.com/rouzbehsbz/manticore/server/internal/infra/db"
 	"github.com/rouzbehsbz/manticore/server/pkg/network"
@@ -71,6 +72,20 @@ func main() {
 	world.AddSystems(
 		zurvan.BuildStageSystems(zurvan.PreUpdateStage,
 			&core.NetworkReceiveSystem{},
+			&combat.StatCalculationSystem{},
+		),
+	)
+
+	world.AddSystems(
+		zurvan.BuildStageSystems(zurvan.FixedUpdateStage,
+			&combat.TakeDamageSystem{},
+			&combat.TakeHealSystem{},
+		),
+	)
+
+	world.AddSystems(
+		zurvan.BuildStageSystems(zurvan.UpdateStage,
+			&combat.RegenerationSystem{},
 		),
 	)
 
