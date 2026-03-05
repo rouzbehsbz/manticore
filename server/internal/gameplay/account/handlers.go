@@ -41,14 +41,16 @@ func (r *RegisterHandler) Handle(rp session.ReceivedPacket) {
 	username := payload.RegisterRequest.Username
 	password := payload.RegisterRequest.Password
 
-	var err error
-	err = isUsernameValid(username)
-	err = isPasswordValid(username)
-	if err != nil {
+	if err := isUsernameValid(username); err != nil {
 		r.sendResponse(rp.Session, false, err.Error())
+		return
+	}
+	if err := isPasswordValid(password); err != nil {
+		r.sendResponse(rp.Session, false, err.Error())
+		return
 	}
 
-	_, err = r.db.Q.GetAccountByUsername(ctx, username)
+	_, err := r.db.Q.GetAccountByUsername(ctx, username)
 	if err == nil {
 		r.sendResponse(rp.Session, false, "This username is already taken.")
 		return
@@ -91,11 +93,13 @@ func (l *LoginHandler) Handle(rp session.ReceivedPacket) {
 	username := payload.LoginRequest.Username
 	password := payload.LoginRequest.Password
 
-	var err error
-	err = isUsernameValid(username)
-	err = isPasswordValid(username)
-	if err != nil {
+	if err := isUsernameValid(username); err != nil {
 		l.sendResponse(rp.Session, false, err.Error())
+		return
+	}
+	if err := isPasswordValid(password); err != nil {
+		l.sendResponse(rp.Session, false, err.Error())
+		return
 	}
 
 	acc, err := l.db.Q.GetAccountByUsername(ctx, username)

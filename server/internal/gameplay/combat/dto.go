@@ -1,5 +1,7 @@
 package combat
 
+import "github.com/rouzbehsbz/zurvan"
+
 type PrimaryStats struct {
 	Vitality     float64
 	intelligence float64
@@ -31,10 +33,12 @@ type OffensiveStats struct {
 	Accuracy       float64
 }
 
-type DamageTaken struct {
+type DamageTakenEvent struct {
+	Entity zurvan.Entity
 	Amount float64
 }
 
-type HealTaken struct {
+type HealTakenEvent struct {
+	Entity zurvan.Entity
 	Amount float64
 }

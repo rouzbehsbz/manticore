@@ -6,14 +6,14 @@ import (
 	"github.com/rouzbehsbz/zurvan"
 )
 
-func SessionManager(w *zurvan.World) *session.SessionManager {
+func SessionManager(w *zurvan.World) (*session.SessionManager, bool) {
 	return zurvan.Resource[*session.SessionManager](w)
 }
 
-func NonBlockingPackets(w *zurvan.World) <-chan session.ReceivedPacket {
+func NonBlockingPackets(w *zurvan.World) (<-chan session.ReceivedPacket, bool) {
 	return zurvan.Resource[<-chan session.ReceivedPacket](w)
 }
 
-func Dispatcher(w *zurvan.World) *network.Dispatcher {
+func Dispatcher(w *zurvan.World) (*network.Dispatcher, bool) {
 	return zurvan.Resource[*network.Dispatcher](w)
 }
