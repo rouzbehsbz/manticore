@@ -3,16 +3,23 @@ package account
 import (
 	"context"
 	"errors"
+	"regexp"
 
+	"github.com/rouzbehsbz/manticore/server/internal/common"
 	"github.com/rouzbehsbz/manticore/server/internal/infra/db"
 	"github.com/rouzbehsbz/manticore/server/internal/infra/db/sources"
+	"github.com/rouzbehsbz/manticore/server/internal/models"
 	"github.com/rouzbehsbz/manticore/server/pkg/network/protocol"
 	"github.com/rouzbehsbz/manticore/server/pkg/network/session"
 	"golang.org/x/crypto/bcrypt"
 )
 
 const (
-	PasswordSalt = 12
+	PasswordSalt int = 12
+)
+
+var (
+	UsernameRegex *regexp.Regexp = regexp.MustCompile(`^[a-zA-Z][a-zA-Z0-9_]{2,49}$`)
 )
 
 type RegisterHandler struct {
@@ -25,13 +32,8 @@ func NewRegisterHandler(db *db.Db) *RegisterHandler {
 	}
 }
 
-func (r *RegisterHandler) sendResponse(session *session.Session, ok bool, msg string) {
-	session.Write(
-		protocol.BuildRegisterResponsePacket(
-			ok,
-			msg,
-		),
-	)
+func (r *RegisterHandler) successResponse(session *session.Session) {
+	session.Write(protocol.BuildRegisterResponsePacket())
 }
 
 func (r *RegisterHandler) Handle(rp session.ReceivedPacket) {
@@ -42,17 +44,17 @@ func (r *RegisterHandler) Handle(rp session.ReceivedPacket) {
 	password := payload.RegisterRequest.Password
 
 	if err := isUsernameValid(username); err != nil {
-		r.sendResponse(rp.Session, false, err.Error())
+		common.ErrorResponse(rp.Session, err.Error())
 		return
 	}
 	if err := isPasswordValid(password); err != nil {
-		r.sendResponse(rp.Session, false, err.Error())
+		common.ErrorResponse(rp.Session, err.Error())
 		return
 	}
 
 	_, err := r.db.Q.GetAccountByUsername(ctx, username)
 	if err == nil {
-		r.sendResponse(rp.Session, false, "This username is already taken.")
+		common.ErrorResponse(rp.Session, "This username is already taken.")
 		return
 	}
 
@@ -64,7 +66,7 @@ func (r *RegisterHandler) Handle(rp session.ReceivedPacket) {
 		Password: string(hashedPassword),
 	})
 
-	r.sendResponse(rp.Session, true, "Your account has been registered successfully.")
+	r.successResponse(rp.Session)
 }
 
 type LoginHandler struct {
@@ -77,13 +79,8 @@ func NewLoginHandler(db *db.Db) *LoginHandler {
 	}
 }
 
-func (l *LoginHandler) sendResponse(session *session.Session, ok bool, msg string) {
-	session.Write(
-		protocol.BuildLoginResponsePacket(
-			ok,
-			msg,
-		),
-	)
+func (l *LoginHandler) successResponse(session *session.Session) {
+	session.Write(protocol.BuildLoginResponsePacket())
 }
 
 func (l *LoginHandler) Handle(rp session.ReceivedPacket) {
@@ -94,26 +91,54 @@ func (l *LoginHandler) Handle(rp session.ReceivedPacket) {
 	password := payload.LoginRequest.Password
 
 	if err := isUsernameValid(username); err != nil {
-		l.sendResponse(rp.Session, false, err.Error())
+		common.ErrorResponse(rp.Session, err.Error())
 		return
 	}
 	if err := isPasswordValid(password); err != nil {
-		l.sendResponse(rp.Session, false, err.Error())
+		common.ErrorResponse(rp.Session, err.Error())
 		return
 	}
 
 	acc, err := l.db.Q.GetAccountByUsername(ctx, username)
 	if err != nil {
-		l.sendResponse(rp.Session, false, "Username or password is incorrect.")
+		common.ErrorResponse(rp.Session, "Username or password is incorrect.")
 		return
 	}
 
 	if err := bcrypt.CompareHashAndPassword([]byte(acc.Password), []byte(password)); err != nil {
-		l.sendResponse(rp.Session, false, "Username or password is incorrect.")
+		common.ErrorResponse(rp.Session, "Username or password is incorrect.")
 		return
 	}
 
-	l.sendResponse(rp.Session, true, "You have logged in successfully.")
+	rp.Session.AccountId = uint32(acc.ID)
+
+	l.successResponse(rp.Session)
+}
+
+type MyCharactersListHandler struct {
+	db *db.Db
+}
+
+func (m *MyCharactersListHandler) successResponse(session *session.Session, myCharacters []*protocol.MyCharacter) {
+	session.Write(protocol.BuildMyCharactersListResponsePacket(myCharacters))
+}
+
+func (m *MyCharactersListHandler) Handle(rp session.ReceivedPacket) {
+	ctx := context.Background()
+
+	if !rp.Session.IsAuthenticated() {
+		common.ErrorResponse(rp.Session, "You're not authenticated.")
+		return
+	}
+
+	rawCharacters, _ := m.db.Q.GetCharactersByAccountId(ctx, int32(rp.Session.AccountId))
+	characters := make([]*protocol.MyCharacter, len(rawCharacters))
+
+	for _, character := range rawCharacters {
+		characters = append(characters, models.MapCharacterToMyCharacterPacket(character))
+	}
+
+	m.successResponse(rp.Session, characters)
 }
 
 func isUsernameValid(username string) error {

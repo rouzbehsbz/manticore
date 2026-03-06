@@ -8,6 +8,7 @@ import (
 
 	"github.com/rouzbehsbz/manticore/server/internal/common"
 	"github.com/rouzbehsbz/manticore/server/internal/gameplay/account"
+	"github.com/rouzbehsbz/manticore/server/internal/gameplay/character"
 	"github.com/rouzbehsbz/manticore/server/internal/gameplay/combat"
 	"github.com/rouzbehsbz/manticore/server/internal/gameplay/core"
 	"github.com/rouzbehsbz/manticore/server/internal/infra/db"
@@ -78,6 +79,8 @@ func main() {
 
 	world.AddSystems(
 		zurvan.BuildStageSystems(zurvan.FixedUpdateStage,
+			&character.ExperienceSystem{},
+			&character.LevelUpSystem{},
 			&combat.TakeDamageSystem{},
 			&combat.TakeHealSystem{},
 		),

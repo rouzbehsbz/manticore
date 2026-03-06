@@ -17,7 +17,9 @@ type ReceivedPacket struct {
 }
 
 type Session struct {
-	id      uint32
+	id        uint32
+	AccountId uint32
+
 	conn    *websocket.Conn
 	manager *SessionManager
 
@@ -32,6 +34,7 @@ type Session struct {
 func NewSession(id uint32, conn *websocket.Conn, manager *SessionManager) *Session {
 	s := &Session{
 		id:        id,
+		AccountId: 0,
 		conn:      conn,
 		frameBuf:  protocol.NewFrame(),
 		mu:        sync.Mutex{},
@@ -44,6 +47,17 @@ func NewSession(id uint32, conn *websocket.Conn, manager *SessionManager) *Sessi
 	go s.sendLoop()
 
 	return s
+}
+
+func (s *Session) Write(packet *protocol.Packet) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	s.frameBuf.Append(packet)
+}
+
+func (s *Session) IsAuthenticated() bool {
+	return s.AccountId != 0
 }
 
 func (s *Session) receiveLoop() {
@@ -99,13 +113,6 @@ func (s *Session) sendLoop() {
 			break
 		}
 	}
-}
-
-func (s *Session) Write(packet *protocol.Packet) {
-	s.mu.Lock()
-	defer s.mu.Unlock()
-
-	s.frameBuf.Append(packet)
 }
 
 func (s *Session) flush() {

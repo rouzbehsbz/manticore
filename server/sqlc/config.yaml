@@ -3,10 +3,12 @@ sql:
   - engine: "postgresql"
     queries:
       - "./queries/accounts.sql"
+      - "./queries/characters.sql"
     schema:
       - "./schemas/accounts.sql"
+      - "./schemas/characters.sql"
     gen:
       go:
         package: "sources"
-        out: "../internal/infrastructure/postgres/sources"
+        out: "../internal/infra/db/sources"
         sql_package: "pgx/v5"

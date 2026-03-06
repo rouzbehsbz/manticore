@@ -26,10 +26,13 @@ type Packet struct {
 	Id    uint32                 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
 	// Types that are valid to be assigned to Payload:
 	//
+	//	*Packet_ErrorResponse
 	//	*Packet_LoginRequest
 	//	*Packet_LoginResponse
 	//	*Packet_RegisterRequest
 	//	*Packet_RegisterResponse
+	//	*Packet_MyCharactersListRequest
+	//	*Packet_MyCharactersListResponse
 	Payload       isPacket_Payload `protobuf_oneof:"payload"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -79,6 +82,15 @@ func (x *Packet) GetPayload() isPacket_Payload {
 	return nil
 }
 
+func (x *Packet) GetErrorResponse() *ErrorResponse {
+	if x != nil {
+		if x, ok := x.Payload.(*Packet_ErrorResponse); ok {
+			return x.ErrorResponse
+		}
+	}
+	return nil
+}
+
 func (x *Packet) GetLoginRequest() *LoginRequest {
 	if x != nil {
 		if x, ok := x.Payload.(*Packet_LoginRequest); ok {
@@ -115,25 +127,57 @@ func (x *Packet) GetRegisterResponse() *RegisterResponse {
 	return nil
 }
 
+func (x *Packet) GetMyCharactersListRequest() *MyCharactersListRequest {
+	if x != nil {
+		if x, ok := x.Payload.(*Packet_MyCharactersListRequest); ok {
+			return x.MyCharactersListRequest
+		}
+	}
+	return nil
+}
+
+func (x *Packet) GetMyCharactersListResponse() *MyCharactersListResponse {
+	if x != nil {
+		if x, ok := x.Payload.(*Packet_MyCharactersListResponse); ok {
+			return x.MyCharactersListResponse
+		}
+	}
+	return nil
+}
+
 type isPacket_Payload interface {
 	isPacket_Payload()
 }
 
+type Packet_ErrorResponse struct {
+	ErrorResponse *ErrorResponse `protobuf:"bytes,2,opt,name=error_response,json=errorResponse,proto3,oneof"`
+}
+
 type Packet_LoginRequest struct {
-	LoginRequest *LoginRequest `protobuf:"bytes,2,opt,name=login_request,json=loginRequest,proto3,oneof"`
+	LoginRequest *LoginRequest `protobuf:"bytes,3,opt,name=login_request,json=loginRequest,proto3,oneof"`
 }
 
 type Packet_LoginResponse struct {
-	LoginResponse *LoginResponse `protobuf:"bytes,3,opt,name=login_response,json=loginResponse,proto3,oneof"`
+	LoginResponse *LoginResponse `protobuf:"bytes,4,opt,name=login_response,json=loginResponse,proto3,oneof"`
 }
 
 type Packet_RegisterRequest struct {
-	RegisterRequest *RegisterRequest `protobuf:"bytes,4,opt,name=register_request,json=registerRequest,proto3,oneof"`
+	RegisterRequest *RegisterRequest `protobuf:"bytes,5,opt,name=register_request,json=registerRequest,proto3,oneof"`
 }
 
 type Packet_RegisterResponse struct {
-	RegisterResponse *RegisterResponse `protobuf:"bytes,5,opt,name=register_response,json=registerResponse,proto3,oneof"`
+	RegisterResponse *RegisterResponse `protobuf:"bytes,6,opt,name=register_response,json=registerResponse,proto3,oneof"`
 }
+
+type Packet_MyCharactersListRequest struct {
+	MyCharactersListRequest *MyCharactersListRequest `protobuf:"bytes,7,opt,name=my_characters_list_request,json=myCharactersListRequest,proto3,oneof"`
+}
+
+type Packet_MyCharactersListResponse struct {
+	MyCharactersListResponse *MyCharactersListResponse `protobuf:"bytes,8,opt,name=my_characters_list_response,json=myCharactersListResponse,proto3,oneof"`
+}
+
+func (*Packet_ErrorResponse) isPacket_Payload() {}
 
 func (*Packet_LoginRequest) isPacket_Payload() {}
 
@@ -142,6 +186,54 @@ func (*Packet_LoginResponse) isPacket_Payload() {}
 func (*Packet_RegisterRequest) isPacket_Payload() {}
 
 func (*Packet_RegisterResponse) isPacket_Payload() {}
+
+func (*Packet_MyCharactersListRequest) isPacket_Payload() {}
+
+func (*Packet_MyCharactersListResponse) isPacket_Payload() {}
+
+type ErrorResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Msg           string                 `protobuf:"bytes,1,opt,name=msg,proto3" json:"msg,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ErrorResponse) Reset() {
+	*x = ErrorResponse{}
+	mi := &file_shared_packets_proto_msgTypes[1]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ErrorResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ErrorResponse) ProtoMessage() {}
+
+func (x *ErrorResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_shared_packets_proto_msgTypes[1]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ErrorResponse.ProtoReflect.Descriptor instead.
+func (*ErrorResponse) Descriptor() ([]byte, []int) {
+	return file_shared_packets_proto_rawDescGZIP(), []int{1}
+}
+
+func (x *ErrorResponse) GetMsg() string {
+	if x != nil {
+		return x.Msg
+	}
+	return ""
+}
 
 type LoginRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
@@ -153,7 +245,7 @@ type LoginRequest struct {
 
 func (x *LoginRequest) Reset() {
 	*x = LoginRequest{}
-	mi := &file_shared_packets_proto_msgTypes[1]
+	mi := &file_shared_packets_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -165,7 +257,7 @@ func (x *LoginRequest) String() string {
 func (*LoginRequest) ProtoMessage() {}
 
 func (x *LoginRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_shared_packets_proto_msgTypes[1]
+	mi := &file_shared_packets_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -178,7 +270,7 @@ func (x *LoginRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use LoginRequest.ProtoReflect.Descriptor instead.
 func (*LoginRequest) Descriptor() ([]byte, []int) {
-	return file_shared_packets_proto_rawDescGZIP(), []int{1}
+	return file_shared_packets_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *LoginRequest) GetUsername() string {
@@ -197,15 +289,13 @@ func (x *LoginRequest) GetPassword() string {
 
 type LoginResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Ok            bool                   `protobuf:"varint,1,opt,name=ok,proto3" json:"ok,omitempty"`
-	Msg           string                 `protobuf:"bytes,2,opt,name=msg,proto3" json:"msg,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *LoginResponse) Reset() {
 	*x = LoginResponse{}
-	mi := &file_shared_packets_proto_msgTypes[2]
+	mi := &file_shared_packets_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -217,7 +307,7 @@ func (x *LoginResponse) String() string {
 func (*LoginResponse) ProtoMessage() {}
 
 func (x *LoginResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_shared_packets_proto_msgTypes[2]
+	mi := &file_shared_packets_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -230,21 +320,7 @@ func (x *LoginResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use LoginResponse.ProtoReflect.Descriptor instead.
 func (*LoginResponse) Descriptor() ([]byte, []int) {
-	return file_shared_packets_proto_rawDescGZIP(), []int{2}
-}
-
-func (x *LoginResponse) GetOk() bool {
-	if x != nil {
-		return x.Ok
-	}
-	return false
-}
-
-func (x *LoginResponse) GetMsg() string {
-	if x != nil {
-		return x.Msg
-	}
-	return ""
+	return file_shared_packets_proto_rawDescGZIP(), []int{3}
 }
 
 type RegisterRequest struct {
@@ -257,7 +333,7 @@ type RegisterRequest struct {
 
 func (x *RegisterRequest) Reset() {
 	*x = RegisterRequest{}
-	mi := &file_shared_packets_proto_msgTypes[3]
+	mi := &file_shared_packets_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -269,7 +345,7 @@ func (x *RegisterRequest) String() string {
 func (*RegisterRequest) ProtoMessage() {}
 
 func (x *RegisterRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_shared_packets_proto_msgTypes[3]
+	mi := &file_shared_packets_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -282,7 +358,7 @@ func (x *RegisterRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RegisterRequest.ProtoReflect.Descriptor instead.
 func (*RegisterRequest) Descriptor() ([]byte, []int) {
-	return file_shared_packets_proto_rawDescGZIP(), []int{3}
+	return file_shared_packets_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *RegisterRequest) GetUsername() string {
@@ -301,15 +377,13 @@ func (x *RegisterRequest) GetPassword() string {
 
 type RegisterResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Ok            bool                   `protobuf:"varint,1,opt,name=ok,proto3" json:"ok,omitempty"`
-	Msg           string                 `protobuf:"bytes,2,opt,name=msg,proto3" json:"msg,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *RegisterResponse) Reset() {
 	*x = RegisterResponse{}
-	mi := &file_shared_packets_proto_msgTypes[4]
+	mi := &file_shared_packets_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -321,7 +395,7 @@ func (x *RegisterResponse) String() string {
 func (*RegisterResponse) ProtoMessage() {}
 
 func (x *RegisterResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_shared_packets_proto_msgTypes[4]
+	mi := &file_shared_packets_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -334,47 +408,183 @@ func (x *RegisterResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RegisterResponse.ProtoReflect.Descriptor instead.
 func (*RegisterResponse) Descriptor() ([]byte, []int) {
-	return file_shared_packets_proto_rawDescGZIP(), []int{4}
+	return file_shared_packets_proto_rawDescGZIP(), []int{5}
 }
 
-func (x *RegisterResponse) GetOk() bool {
+type MyCharactersListRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *MyCharactersListRequest) Reset() {
+	*x = MyCharactersListRequest{}
+	mi := &file_shared_packets_proto_msgTypes[6]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *MyCharactersListRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*MyCharactersListRequest) ProtoMessage() {}
+
+func (x *MyCharactersListRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_shared_packets_proto_msgTypes[6]
 	if x != nil {
-		return x.Ok
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
 	}
-	return false
+	return mi.MessageOf(x)
 }
 
-func (x *RegisterResponse) GetMsg() string {
+// Deprecated: Use MyCharactersListRequest.ProtoReflect.Descriptor instead.
+func (*MyCharactersListRequest) Descriptor() ([]byte, []int) {
+	return file_shared_packets_proto_rawDescGZIP(), []int{6}
+}
+
+type MyCharacter struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            uint32                 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	Nickname      string                 `protobuf:"bytes,2,opt,name=nickname,proto3" json:"nickname,omitempty"`
+	Level         uint32                 `protobuf:"varint,3,opt,name=level,proto3" json:"level,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *MyCharacter) Reset() {
+	*x = MyCharacter{}
+	mi := &file_shared_packets_proto_msgTypes[7]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *MyCharacter) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*MyCharacter) ProtoMessage() {}
+
+func (x *MyCharacter) ProtoReflect() protoreflect.Message {
+	mi := &file_shared_packets_proto_msgTypes[7]
 	if x != nil {
-		return x.Msg
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use MyCharacter.ProtoReflect.Descriptor instead.
+func (*MyCharacter) Descriptor() ([]byte, []int) {
+	return file_shared_packets_proto_rawDescGZIP(), []int{7}
+}
+
+func (x *MyCharacter) GetId() uint32 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
+func (x *MyCharacter) GetNickname() string {
+	if x != nil {
+		return x.Nickname
 	}
 	return ""
+}
+
+func (x *MyCharacter) GetLevel() uint32 {
+	if x != nil {
+		return x.Level
+	}
+	return 0
+}
+
+type MyCharactersListResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Characters    []*MyCharacter         `protobuf:"bytes,1,rep,name=characters,proto3" json:"characters,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *MyCharactersListResponse) Reset() {
+	*x = MyCharactersListResponse{}
+	mi := &file_shared_packets_proto_msgTypes[8]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *MyCharactersListResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*MyCharactersListResponse) ProtoMessage() {}
+
+func (x *MyCharactersListResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_shared_packets_proto_msgTypes[8]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use MyCharactersListResponse.ProtoReflect.Descriptor instead.
+func (*MyCharactersListResponse) Descriptor() ([]byte, []int) {
+	return file_shared_packets_proto_rawDescGZIP(), []int{8}
+}
+
+func (x *MyCharactersListResponse) GetCharacters() []*MyCharacter {
+	if x != nil {
+		return x.Characters
+	}
+	return nil
 }
 
 var File_shared_packets_proto protoreflect.FileDescriptor
 
 const file_shared_packets_proto_rawDesc = "" +
 	"\n" +
-	"\x14shared/packets.proto\"\x93\x02\n" +
+	"\x14shared/packets.proto\"\x81\x04\n" +
 	"\x06Packet\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\rR\x02id\x124\n" +
-	"\rlogin_request\x18\x02 \x01(\v2\r.LoginRequestH\x00R\floginRequest\x127\n" +
-	"\x0elogin_response\x18\x03 \x01(\v2\x0e.LoginResponseH\x00R\rloginResponse\x12=\n" +
-	"\x10register_request\x18\x04 \x01(\v2\x10.RegisterRequestH\x00R\x0fregisterRequest\x12@\n" +
-	"\x11register_response\x18\x05 \x01(\v2\x11.RegisterResponseH\x00R\x10registerResponseB\t\n" +
-	"\apayload\"F\n" +
+	"\x02id\x18\x01 \x01(\rR\x02id\x127\n" +
+	"\x0eerror_response\x18\x02 \x01(\v2\x0e.ErrorResponseH\x00R\rerrorResponse\x124\n" +
+	"\rlogin_request\x18\x03 \x01(\v2\r.LoginRequestH\x00R\floginRequest\x127\n" +
+	"\x0elogin_response\x18\x04 \x01(\v2\x0e.LoginResponseH\x00R\rloginResponse\x12=\n" +
+	"\x10register_request\x18\x05 \x01(\v2\x10.RegisterRequestH\x00R\x0fregisterRequest\x12@\n" +
+	"\x11register_response\x18\x06 \x01(\v2\x11.RegisterResponseH\x00R\x10registerResponse\x12W\n" +
+	"\x1amy_characters_list_request\x18\a \x01(\v2\x18.MyCharactersListRequestH\x00R\x17myCharactersListRequest\x12Z\n" +
+	"\x1bmy_characters_list_response\x18\b \x01(\v2\x19.MyCharactersListResponseH\x00R\x18myCharactersListResponseB\t\n" +
+	"\apayload\"!\n" +
+	"\rErrorResponse\x12\x10\n" +
+	"\x03msg\x18\x01 \x01(\tR\x03msg\"F\n" +
 	"\fLoginRequest\x12\x1a\n" +
 	"\busername\x18\x01 \x01(\tR\busername\x12\x1a\n" +
-	"\bpassword\x18\x02 \x01(\tR\bpassword\"1\n" +
-	"\rLoginResponse\x12\x0e\n" +
-	"\x02ok\x18\x01 \x01(\bR\x02ok\x12\x10\n" +
-	"\x03msg\x18\x02 \x01(\tR\x03msg\"I\n" +
+	"\bpassword\x18\x02 \x01(\tR\bpassword\"\x0f\n" +
+	"\rLoginResponse\"I\n" +
 	"\x0fRegisterRequest\x12\x1a\n" +
 	"\busername\x18\x01 \x01(\tR\busername\x12\x1a\n" +
-	"\bpassword\x18\x02 \x01(\tR\bpassword\"4\n" +
-	"\x10RegisterResponse\x12\x0e\n" +
-	"\x02ok\x18\x01 \x01(\bR\x02ok\x12\x10\n" +
-	"\x03msg\x18\x02 \x01(\tR\x03msgB&Z$server/pkg/network/protocol;protocolb\x06proto3"
+	"\bpassword\x18\x02 \x01(\tR\bpassword\"\x12\n" +
+	"\x10RegisterResponse\"\x19\n" +
+	"\x17MyCharactersListRequest\"O\n" +
+	"\vMyCharacter\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\rR\x02id\x12\x1a\n" +
+	"\bnickname\x18\x02 \x01(\tR\bnickname\x12\x14\n" +
+	"\x05level\x18\x03 \x01(\rR\x05level\"H\n" +
+	"\x18MyCharactersListResponse\x12,\n" +
+	"\n" +
+	"characters\x18\x01 \x03(\v2\f.MyCharacterR\n" +
+	"charactersB&Z$server/pkg/network/protocol;protocolb\x06proto3"
 
 var (
 	file_shared_packets_proto_rawDescOnce sync.Once
@@ -388,24 +598,32 @@ func file_shared_packets_proto_rawDescGZIP() []byte {
 	return file_shared_packets_proto_rawDescData
 }
 
-var file_shared_packets_proto_msgTypes = make([]protoimpl.MessageInfo, 5)
+var file_shared_packets_proto_msgTypes = make([]protoimpl.MessageInfo, 9)
 var file_shared_packets_proto_goTypes = []any{
-	(*Packet)(nil),           // 0: Packet
-	(*LoginRequest)(nil),     // 1: LoginRequest
-	(*LoginResponse)(nil),    // 2: LoginResponse
-	(*RegisterRequest)(nil),  // 3: RegisterRequest
-	(*RegisterResponse)(nil), // 4: RegisterResponse
+	(*Packet)(nil),                   // 0: Packet
+	(*ErrorResponse)(nil),            // 1: ErrorResponse
+	(*LoginRequest)(nil),             // 2: LoginRequest
+	(*LoginResponse)(nil),            // 3: LoginResponse
+	(*RegisterRequest)(nil),          // 4: RegisterRequest
+	(*RegisterResponse)(nil),         // 5: RegisterResponse
+	(*MyCharactersListRequest)(nil),  // 6: MyCharactersListRequest
+	(*MyCharacter)(nil),              // 7: MyCharacter
+	(*MyCharactersListResponse)(nil), // 8: MyCharactersListResponse
 }
 var file_shared_packets_proto_depIdxs = []int32{
-	1, // 0: Packet.login_request:type_name -> LoginRequest
-	2, // 1: Packet.login_response:type_name -> LoginResponse
-	3, // 2: Packet.register_request:type_name -> RegisterRequest
-	4, // 3: Packet.register_response:type_name -> RegisterResponse
-	4, // [4:4] is the sub-list for method output_type
-	4, // [4:4] is the sub-list for method input_type
-	4, // [4:4] is the sub-list for extension type_name
-	4, // [4:4] is the sub-list for extension extendee
-	0, // [0:4] is the sub-list for field type_name
+	1, // 0: Packet.error_response:type_name -> ErrorResponse
+	2, // 1: Packet.login_request:type_name -> LoginRequest
+	3, // 2: Packet.login_response:type_name -> LoginResponse
+	4, // 3: Packet.register_request:type_name -> RegisterRequest
+	5, // 4: Packet.register_response:type_name -> RegisterResponse
+	6, // 5: Packet.my_characters_list_request:type_name -> MyCharactersListRequest
+	8, // 6: Packet.my_characters_list_response:type_name -> MyCharactersListResponse
+	7, // 7: MyCharactersListResponse.characters:type_name -> MyCharacter
+	8, // [8:8] is the sub-list for method output_type
+	8, // [8:8] is the sub-list for method input_type
+	8, // [8:8] is the sub-list for extension type_name
+	8, // [8:8] is the sub-list for extension extendee
+	0, // [0:8] is the sub-list for field type_name
 }
 
 func init() { file_shared_packets_proto_init() }
@@ -414,10 +632,13 @@ func file_shared_packets_proto_init() {
 		return
 	}
 	file_shared_packets_proto_msgTypes[0].OneofWrappers = []any{
+		(*Packet_ErrorResponse)(nil),
 		(*Packet_LoginRequest)(nil),
 		(*Packet_LoginResponse)(nil),
 		(*Packet_RegisterRequest)(nil),
 		(*Packet_RegisterResponse)(nil),
+		(*Packet_MyCharactersListRequest)(nil),
+		(*Packet_MyCharactersListResponse)(nil),
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
@@ -425,7 +646,7 @@ func file_shared_packets_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_shared_packets_proto_rawDesc), len(file_shared_packets_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   5,
+			NumMessages:   9,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

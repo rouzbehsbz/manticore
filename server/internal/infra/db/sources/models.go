@@ -14,3 +14,17 @@ type Account struct {
 	Password  string
 	CreatedAt pgtype.Timestamptz
 }
+
+type Character struct {
+	ID           int32
+	AccountID    int32
+	Nickname     string
+	Level        int32
+	Xp           int32
+	Vitality     int32
+	Intelligence int32
+	Willpower    int32
+	Dexterity    int32
+	Spirit       int32
+	CreatedAt    pgtype.Timestamptz
+}

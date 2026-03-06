@@ -11,5 +11,5 @@ CREATE TABLE IF NOT EXISTS "characters" (
     spirit INTEGER NOT NULL CHECK (spirit >= 0),
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
 
-    CONSTRAINT fk_account FOREIGN KEY (account_id) REFERENCES accounts(id) ON DELETE RESTRICT,
+    CONSTRAINT fk_account FOREIGN KEY (account_id) REFERENCES accounts(id) ON DELETE RESTRICT
 )
