@@ -17,14 +17,12 @@ func (c *CastSpellSystem) Update(w *zurvan.World, dt time.Duration) {
 	for _, event := range events {
 		c := zurvan.QueryOne1[CastingSpell](w, event.Caster)
 		if c != nil {
-			// character is already casting
 			continue
 		}
 
 		m := zurvan.QueryOne1[character.Mana](w, event.Caster)
 
 		if event.Spell.ManaCost > m.Current {
-			// not enough mana
 			continue
 		}
 
@@ -48,7 +46,11 @@ func (c *CastingSpellSystem) Update(w *zurvan.World, dt time.Duration) {
 	events := zurvan.OnEvent[CancelCastSpellEvent](w)
 
 	for _, event := range events {
-		// delete CastingSpell component from this entity
+		w.PushCommands(
+			zurvan.NewDeleteComponentsCommand(event.Caster,
+				CastingSpell{},
+			),
+		)
 	}
 
 	zurvan.QueryMany1[CastingSpell](w, func(e []zurvan.Entity, cs []CastingSpell) {
@@ -56,7 +58,12 @@ func (c *CastingSpellSystem) Update(w *zurvan.World, dt time.Duration) {
 			cs[i].RemainingTime -= dt
 
 			if cs[i].RemainingTime <= 0 {
-				// delete CastingSpell component from this entity
+				w.PushCommands(
+					zurvan.NewDeleteComponentsCommand(e[i],
+						CastingSpell{},
+					),
+				)
+
 				// set specific spell cooldown and all spells cooldown
 
 				w.EmitEvents(
@@ -150,8 +157,13 @@ func (t *TakeOverTimeSystem) Update(w *zurvan.World, dt time.Duration) {
 			}
 
 			tot[i].RemainingTime -= dt
+
 			if tot[i].RemainingTime <= 0 {
-				// delete TakingOverTime component
+				w.PushCommands(
+					zurvan.NewDeleteComponentsCommand(e[i],
+						TakingOverTime{},
+					),
+				)
 			}
 		}
 	})
