@@ -5,38 +5,46 @@ option go_package = "server/pkg/network/protocol;protocol";
 message Packet {
   uint32 id = 1;
   oneof payload {
-    ErrorResponse error_response = 2;
-    LoginRequest login_request = 3;
-    LoginResponse login_response = 4;
-    RegisterRequest register_request = 5;
-    RegisterResponse register_response = 6;
-    MyCharactersListRequest my_characters_list_request = 7;
-    MyCharactersListResponse my_characters_list_response = 8;
+    ErrorRes error_res = 2;
+    LoginReq login_req = 3;
+    LoginRes login_res = 4;
+    RegisterReq register_req = 5;
+    RegisterRes register_res = 6;
+    MyCharactersListReq my_characters_list_req = 7;
+    MyCharactersListRes my_characters_list_res = 8;
+    CastSpellReq cast_spell_req = 9;
+    CastSpellRes cast_spell_res = 10;
   }
 }
 
-message ErrorResponse {
+message ErrorRes {
     string msg = 1;
 }
 
-message LoginRequest {
+message LoginReq {
   string username = 1;
   string password = 2;
 }
-message LoginResponse {};
+message LoginRes {};
 
-message RegisterRequest {
+message RegisterReq {
   string username = 1;
   string password = 2;
 }
-message RegisterResponse{}
+message RegisterRes{}
 
-message MyCharactersListRequest {}
+message MyCharactersListReq {}
 message MyCharacter {
     uint32 id = 1;
     string nickname = 2;
     uint32 level = 3;
 }
-message MyCharactersListResponse {
+message MyCharactersListRes {
     repeated MyCharacter characters = 1;
 }
+
+message CastSpellReq {
+    uint32 spell_id = 1;
+    uint32 target_id = 2;
+}
+message CastSpellRes {}

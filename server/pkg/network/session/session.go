@@ -17,8 +17,10 @@ type ReceivedPacket struct {
 }
 
 type Session struct {
-	id        uint32
-	AccountId uint32
+	id uint32
+
+	AccountId   uint32
+	CharacterId uint32
 
 	conn    *websocket.Conn
 	manager *SessionManager
@@ -33,14 +35,15 @@ type Session struct {
 
 func NewSession(id uint32, conn *websocket.Conn, manager *SessionManager) *Session {
 	s := &Session{
-		id:        id,
-		AccountId: 0,
-		conn:      conn,
-		frameBuf:  protocol.NewFrame(),
-		mu:        sync.Mutex{},
-		send:      make(chan protocol.Frame, SendBufferSize),
-		manager:   manager,
-		closeOnce: sync.Once{},
+		id:          id,
+		AccountId:   0,
+		CharacterId: 0,
+		conn:        conn,
+		frameBuf:    protocol.NewFrame(),
+		mu:          sync.Mutex{},
+		send:        make(chan protocol.Frame, SendBufferSize),
+		manager:     manager,
+		closeOnce:   sync.Once{},
 	}
 
 	go s.receiveLoop()
@@ -57,6 +60,10 @@ func (s *Session) Write(packet *protocol.Packet) {
 }
 
 func (s *Session) IsAuthenticated() bool {
+	return s.AccountId != 0
+}
+
+func (s *Session) IsCharacterSelected() bool {
 	return s.AccountId != 0
 }
 

@@ -5,13 +5,15 @@ import (
 )
 
 const (
-	ErrorResponsePacketId uint8 = iota
-	LoginRequestPacketId
-	LoginResponsePacketId
-	RegisterRequestPacketId
-	RegisterResponsePacketId
-	MyCharactersListRequestPacketId
-	MyCharactersListResponsePacketId
+	ErrorResPacketId uint8 = iota
+	LoginReqPacketId
+	LoginResPacketId
+	RegisterReqPacketId
+	RegisterResPacketId
+	MyCharactersListReqPacketId
+	MyCharactersListResPacketId
+	CastSpellReqPacketId
+	CastSpellResPacketId
 )
 
 const (
@@ -20,49 +22,51 @@ const (
 )
 
 var PacketRegistry = map[uint8]proto.Message{
-	ErrorResponsePacketId:            &ErrorResponse{},
-	LoginRequestPacketId:             &LoginRequest{},
-	LoginResponsePacketId:            &LoginResponse{},
-	RegisterRequestPacketId:          &RegisterRequest{},
-	RegisterResponsePacketId:         &RegisterResponse{},
-	MyCharactersListRequestPacketId:  &MyCharactersListRequest{},
-	MyCharactersListResponsePacketId: &MyCharactersListResponse{},
+	ErrorResPacketId:            &ErrorRes{},
+	LoginReqPacketId:            &LoginReq{},
+	LoginResPacketId:            &LoginRes{},
+	RegisterReqPacketId:         &RegisterReq{},
+	RegisterResPacketId:         &RegisterRes{},
+	MyCharactersListReqPacketId: &MyCharactersListReq{},
+	MyCharactersListResPacketId: &MyCharactersListRes{},
+	CastSpellReqPacketId:        &CastSpellReq{},
+	CastSpellResPacketId:        &CastSpellReq{},
 }
 
-func BuildErrorResponsePacket(msg string) *Packet {
+func BuildErrorResPacket(msg string) *Packet {
 	return &Packet{
-		Id: uint32(ErrorResponsePacketId),
-		Payload: &Packet_ErrorResponse{
-			ErrorResponse: &ErrorResponse{
+		Id: uint32(ErrorResPacketId),
+		Payload: &Packet_ErrorRes{
+			ErrorRes: &ErrorRes{
 				Msg: msg,
 			},
 		},
 	}
 }
 
-func BuildRegisterResponsePacket() *Packet {
+func BuildRegisterResPacket() *Packet {
 	return &Packet{
-		Id: uint32(RegisterResponsePacketId),
-		Payload: &Packet_RegisterResponse{
-			RegisterResponse: &RegisterResponse{},
+		Id: uint32(RegisterResPacketId),
+		Payload: &Packet_RegisterRes{
+			RegisterRes: &RegisterRes{},
 		},
 	}
 }
 
-func BuildLoginResponsePacket() *Packet {
+func BuildLoginResPacket() *Packet {
 	return &Packet{
-		Id: uint32(LoginResponsePacketId),
-		Payload: &Packet_LoginResponse{
-			LoginResponse: &LoginResponse{},
+		Id: uint32(LoginResPacketId),
+		Payload: &Packet_LoginRes{
+			LoginRes: &LoginRes{},
 		},
 	}
 }
 
-func BuildMyCharactersListResponsePacket(characters []*MyCharacter) *Packet {
+func BuildMyCharactersListResPacket(characters []*MyCharacter) *Packet {
 	return &Packet{
-		Id: uint32(MyCharactersListResponsePacketId),
-		Payload: &Packet_MyCharactersListResponse{
-			MyCharactersListResponse: &MyCharactersListResponse{
+		Id: uint32(MyCharactersListResPacketId),
+		Payload: &Packet_MyCharactersListRes{
+			MyCharactersListRes: &MyCharactersListRes{
 				Characters: characters,
 			},
 		},
@@ -70,13 +74,15 @@ func BuildMyCharactersListResponsePacket(characters []*MyCharacter) *Packet {
 }
 
 var PacketTypeRegistry = map[uint8]uint8{
-	ErrorResponsePacketId:            NoneBlockingPacketType,
-	LoginRequestPacketId:             BlockingPacketType,
-	LoginResponsePacketId:            BlockingPacketType,
-	RegisterRequestPacketId:          BlockingPacketType,
-	RegisterResponsePacketId:         BlockingPacketType,
-	MyCharactersListRequestPacketId:  BlockingPacketType,
-	MyCharactersListResponsePacketId: NoneBlockingPacketType,
+	ErrorResPacketId:            NoneBlockingPacketType,
+	LoginReqPacketId:            BlockingPacketType,
+	LoginResPacketId:            BlockingPacketType,
+	RegisterReqPacketId:         BlockingPacketType,
+	RegisterResPacketId:         BlockingPacketType,
+	MyCharactersListReqPacketId: BlockingPacketType,
+	MyCharactersListResPacketId: BlockingPacketType,
+	CastSpellReqPacketId:        NoneBlockingPacketType,
+	CastSpellResPacketId:        NoneBlockingPacketType,
 }
 
 func IsNoneBlockingPacketType(packetId uint8) (bool, bool) {

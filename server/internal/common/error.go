@@ -5,6 +5,10 @@ import (
 	"github.com/rouzbehsbz/manticore/server/pkg/network/session"
 )
 
-func ErrorResponse(session *session.Session, msg string) {
-	session.Write(protocol.BuildErrorResponsePacket(msg))
+const (
+	UnauthorizedErrorMsg = "You're not authenticated."
+)
+
+func ErrorRes(session *session.Session, msg string) {
+	session.Write(protocol.BuildErrorResPacket(msg))
 }

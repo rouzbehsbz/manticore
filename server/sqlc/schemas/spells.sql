@@ -1,5 +1,0 @@
-CREATE TABLE IF NOT EXISTS "spells" (
-    id SERIAL PRIMARY KEY,
-    name VARCHAR(50) NOT NULL UNIQUE,
-    description VARCHAR(255) NOT NULL,
-);

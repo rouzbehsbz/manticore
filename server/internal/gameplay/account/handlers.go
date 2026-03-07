@@ -32,29 +32,29 @@ func NewRegisterHandler(db *db.Db) *RegisterHandler {
 	}
 }
 
-func (r *RegisterHandler) successResponse(session *session.Session) {
-	session.Write(protocol.BuildRegisterResponsePacket())
+func (r *RegisterHandler) successRes(session *session.Session) {
+	session.Write(protocol.BuildRegisterResPacket())
 }
 
 func (r *RegisterHandler) Handle(rp session.ReceivedPacket) {
 	ctx := context.Background()
-	payload := rp.Packet.Payload.(*protocol.Packet_RegisterRequest)
+	payload := rp.Packet.Payload.(*protocol.Packet_RegisterReq)
 
-	username := payload.RegisterRequest.Username
-	password := payload.RegisterRequest.Password
+	username := payload.RegisterReq.Username
+	password := payload.RegisterReq.Password
 
 	if err := isUsernameValid(username); err != nil {
-		common.ErrorResponse(rp.Session, err.Error())
+		common.ErrorRes(rp.Session, err.Error())
 		return
 	}
 	if err := isPasswordValid(password); err != nil {
-		common.ErrorResponse(rp.Session, err.Error())
+		common.ErrorRes(rp.Session, err.Error())
 		return
 	}
 
 	_, err := r.db.Q.GetAccountByUsername(ctx, username)
 	if err == nil {
-		common.ErrorResponse(rp.Session, "This username is already taken.")
+		common.ErrorRes(rp.Session, "This username is already taken.")
 		return
 	}
 
@@ -66,7 +66,7 @@ func (r *RegisterHandler) Handle(rp session.ReceivedPacket) {
 		Password: string(hashedPassword),
 	})
 
-	r.successResponse(rp.Session)
+	r.successRes(rp.Session)
 }
 
 type LoginHandler struct {
@@ -79,57 +79,63 @@ func NewLoginHandler(db *db.Db) *LoginHandler {
 	}
 }
 
-func (l *LoginHandler) successResponse(session *session.Session) {
-	session.Write(protocol.BuildLoginResponsePacket())
+func (l *LoginHandler) successRes(session *session.Session) {
+	session.Write(protocol.BuildLoginResPacket())
 }
 
 func (l *LoginHandler) Handle(rp session.ReceivedPacket) {
 	ctx := context.Background()
-	payload := rp.Packet.Payload.(*protocol.Packet_LoginRequest)
+	payload := rp.Packet.Payload.(*protocol.Packet_LoginReq)
 
-	username := payload.LoginRequest.Username
-	password := payload.LoginRequest.Password
+	username := payload.LoginReq.Username
+	password := payload.LoginReq.Password
 
 	if err := isUsernameValid(username); err != nil {
-		common.ErrorResponse(rp.Session, err.Error())
+		common.ErrorRes(rp.Session, err.Error())
 		return
 	}
 	if err := isPasswordValid(password); err != nil {
-		common.ErrorResponse(rp.Session, err.Error())
+		common.ErrorRes(rp.Session, err.Error())
 		return
 	}
 
 	acc, err := l.db.Q.GetAccountByUsername(ctx, username)
 	if err != nil {
-		common.ErrorResponse(rp.Session, "Username or password is incorrect.")
+		common.ErrorRes(rp.Session, "Username or password is incorrect.")
 		return
 	}
 
 	if err := bcrypt.CompareHashAndPassword([]byte(acc.Password), []byte(password)); err != nil {
-		common.ErrorResponse(rp.Session, "Username or password is incorrect.")
+		common.ErrorRes(rp.Session, "Username or password is incorrect.")
 		return
 	}
 
 	rp.Session.AccountId = uint32(acc.ID)
 
-	l.successResponse(rp.Session)
+	l.successRes(rp.Session)
 }
 
 type MyCharactersListHandler struct {
 	db *db.Db
 }
 
+func NewMyCharactersListHandler(db *db.Db) *MyCharactersListHandler {
+	return &MyCharactersListHandler{
+		db: db,
+	}
+}
+
 func (m *MyCharactersListHandler) successResponse(session *session.Session, myCharacters []*protocol.MyCharacter) {
-	session.Write(protocol.BuildMyCharactersListResponsePacket(myCharacters))
+	session.Write(protocol.BuildMyCharactersListResPacket(myCharacters))
 }
 
 func (m *MyCharactersListHandler) Handle(rp session.ReceivedPacket) {
-	ctx := context.Background()
-
 	if !rp.Session.IsAuthenticated() {
-		common.ErrorResponse(rp.Session, "You're not authenticated.")
+		common.ErrorRes(rp.Session, common.UnauthorizedErrorMsg)
 		return
 	}
+
+	ctx := context.Background()
 
 	rawCharacters, _ := m.db.Q.GetCharactersByAccountId(ctx, int32(rp.Session.AccountId))
 	characters := make([]*protocol.MyCharacter, len(rawCharacters))

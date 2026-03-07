@@ -1,35 +1,160 @@
 package combat
 
 import (
-	"math"
 	"math/rand"
 	"time"
 
 	"github.com/rouzbehsbz/manticore/server/internal/gameplay/character"
+	"github.com/rouzbehsbz/manticore/server/internal/models"
 	"github.com/rouzbehsbz/zurvan"
 )
 
-type StatCalculationSystem struct{}
+type CastSpellSystem struct{}
 
-func (s *StatCalculationSystem) Update(w *zurvan.World, dt time.Duration) {
-	events := zurvan.OnEvent[RecalculateStatsEvent](w)
+func (c *CastSpellSystem) Update(w *zurvan.World, dt time.Duration) {
+	events := zurvan.OnEvent[CastSpellEvent](w)
 
 	for _, event := range events {
-		h, m, o, d, p := zurvan.QueryOne5[character.Health, character.Mana, character.OffensiveStats, character.DefensiveStats, character.PrimaryStats](w, event.Entity)
+		c := zurvan.QueryOne1[CastingSpell](w, event.Caster)
+		if c != nil {
+			// character is already casting
+			continue
+		}
 
-		h.Max = 100 + p.Vitality*10 + math.Sqrt(p.Spirit)*5
-		h.Regeneration = 0.1*math.Sqrt(p.Vitality) + 0.3*math.Sqrt(p.Spirit)
+		m := zurvan.QueryOne1[character.Mana](w, event.Caster)
 
-		m.Max = 50 + p.Intelligence*12 + p.Willpower*5
-		m.Regeneration = 0.2*math.Sqrt(p.Willpower) + 0.2*math.Sqrt(p.Spirit)
+		if event.Spell.ManaCost > m.Current {
+			// not enough mana
+			continue
+		}
 
-		d.MagicResistance = 0.5 * p.Willpower
-		d.Evasion = 0.5 * p.Dexterity
+		m.Current -= event.Spell.ManaCost
 
-		o.SpellPower = p.Intelligence*2 + p.Willpower*0.5
-		o.CriticalRating = p.Dexterity + 0.5*p.Spirit
-		o.Accuracy = p.Dexterity
+		w.PushCommands(
+			zurvan.NewSetComponentsCommand(event.Caster,
+				CastingSpell{
+					Target:        event.Target,
+					Spell:         event.Spell,
+					RemainingTime: event.Spell.CastTime,
+				},
+			),
+		)
 	}
+}
+
+type CastingSpellSystem struct{}
+
+func (c *CastingSpellSystem) Update(w *zurvan.World, dt time.Duration) {
+	events := zurvan.OnEvent[CancelCastSpellEvent](w)
+
+	for _, event := range events {
+		// delete CastingSpell component from this entity
+	}
+
+	zurvan.QueryMany1[CastingSpell](w, func(e []zurvan.Entity, cs []CastingSpell) {
+		for i, _ := range e {
+			cs[i].RemainingTime -= dt
+
+			if cs[i].RemainingTime <= 0 {
+				// delete CastingSpell component from this entity
+				// set specific spell cooldown and all spells cooldown
+
+				w.EmitEvents(
+					FireSpellEvent{
+						Caster: e[i],
+						Target: cs[i].Target,
+						Spell:  cs[i].Spell,
+					},
+				)
+			}
+		}
+	})
+}
+
+type FireSpellSystem struct{}
+
+func (f *FireSpellSystem) Update(w *zurvan.World, dt time.Duration) {
+	events := zurvan.OnEvent[FireSpellEvent](w)
+
+	// maybe need to generate the spell entity in the map and
+	// calculate the distance before firing
+	//
+	// also calculate final amount of spell based on caster stats
+
+	for _, event := range events {
+		spellEffect := event.Spell.Effect
+
+		switch spellEffect.Type {
+		case models.DamageEffect:
+			w.EmitEvents(
+				TakeDamageEvent{
+					Target: event.Target,
+					Amount: spellEffect.Amount,
+				},
+			)
+
+		case models.HealEffect:
+			w.EmitEvents(
+				TakeHealEvent{
+					Target: event.Target,
+					Amount: spellEffect.Amount,
+				},
+			)
+
+		case models.DamageOverTimeEffect:
+			w.PushCommands(
+				zurvan.NewSetComponentsCommand(
+					event.Target,
+					TakingOverTime{
+						SpellEffect:   spellEffect,
+						RemainingTime: spellEffect.Duration,
+					},
+				),
+			)
+
+		case models.HealOverTimeEffect:
+			w.PushCommands(
+				zurvan.NewSetComponentsCommand(
+					event.Target,
+					TakingOverTime{
+						SpellEffect:   spellEffect,
+						RemainingTime: spellEffect.Duration,
+					},
+				),
+			)
+		}
+	}
+}
+
+type TakeOverTimeSystem struct{}
+
+func (t *TakeOverTimeSystem) Update(w *zurvan.World, dt time.Duration) {
+	zurvan.QueryMany1[TakingOverTime](w, func(e []zurvan.Entity, tot []TakingOverTime) {
+		for i, _ := range e {
+			switch tot[i].SpellEffect.Type {
+			case models.DamageOverTimeEffect:
+				w.EmitEvents(
+					TakeDamageEvent{
+						Target: e[i],
+						Amount: tot[i].SpellEffect.Amount,
+					},
+				)
+
+			case models.HealOverTimeEffect:
+				w.EmitEvents(
+					TakeHealEvent{
+						Target: e[i],
+						Amount: tot[i].SpellEffect.Amount,
+					},
+				)
+			}
+
+			tot[i].RemainingTime -= dt
+			if tot[i].RemainingTime <= 0 {
+				// delete TakingOverTime component
+			}
+		}
+	})
 }
 
 type RegenerationSystem struct{}
@@ -51,10 +176,10 @@ func (r *RegenerationSystem) Update(w *zurvan.World, dt time.Duration) {
 type TakeDamageSystem struct{}
 
 func (t *TakeDamageSystem) Update(w *zurvan.World, dt time.Duration) {
-	events := zurvan.OnEvent[DamageTakenEvent](w)
+	events := zurvan.OnEvent[TakeDamageEvent](w)
 
 	for _, event := range events {
-		h, ds := zurvan.QueryOne2[character.Health, character.DefensiveStats](w, event.Entity)
+		h, ds := zurvan.QueryOne2[character.Health, character.DefensiveStats](w, event.Target)
 
 		evasionPerc := 0.5 * ds.Evasion / (ds.Evasion + 100)
 		if rand.Float64() > evasionPerc {
@@ -66,16 +191,18 @@ func (t *TakeDamageSystem) Update(w *zurvan.World, dt time.Duration) {
 
 		h.Current -= finalDamage
 		h.Current = min(h.Current, h.Max)
+
+		// must handle death event
 	}
 }
 
 type TakeHealSystem struct{}
 
 func (t *TakeHealSystem) Update(w *zurvan.World, dt time.Duration) {
-	events := zurvan.OnEvent[HealTakenEvent](w)
+	events := zurvan.OnEvent[TakeHealEvent](w)
 
 	for _, event := range events {
-		h := zurvan.QueryOne1[character.Health](w, event.Entity)
+		h := zurvan.QueryOne1[character.Health](w, event.Target)
 
 		h.Current += event.Amount
 		h.Current = min(h.Current, h.Max)

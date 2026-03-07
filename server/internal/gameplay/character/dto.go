@@ -1,6 +1,17 @@
 package character
 
-import "github.com/rouzbehsbz/zurvan"
+import (
+	"github.com/rouzbehsbz/manticore/server/pkg/util"
+	"github.com/rouzbehsbz/zurvan"
+)
+
+func Characters(w *zurvan.World) (*util.SyncMap[uint32, zurvan.Entity], bool) {
+	return zurvan.Resource[*util.SyncMap[uint32, zurvan.Entity]](w)
+}
+
+type Character struct {
+	Id int
+}
 
 type Level struct {
 	Value             int
@@ -46,4 +57,8 @@ type LevelUpEvent struct {
 type XpGainedEvent struct {
 	Entity zurvan.Entity
 	Amount int
+}
+
+type RecalculateStatsEvent struct {
+	Entity zurvan.Entity
 }

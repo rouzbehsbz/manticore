@@ -12,9 +12,11 @@ import (
 	"github.com/rouzbehsbz/manticore/server/internal/gameplay/combat"
 	"github.com/rouzbehsbz/manticore/server/internal/gameplay/core"
 	"github.com/rouzbehsbz/manticore/server/internal/infra/db"
+	"github.com/rouzbehsbz/manticore/server/internal/models"
 	"github.com/rouzbehsbz/manticore/server/pkg/network"
 	"github.com/rouzbehsbz/manticore/server/pkg/network/protocol"
 	"github.com/rouzbehsbz/manticore/server/pkg/pool"
+	"github.com/rouzbehsbz/manticore/server/pkg/util"
 	"github.com/rouzbehsbz/zurvan"
 )
 
@@ -43,11 +45,15 @@ func main() {
 		panic(err)
 	}
 
+	world := zurvan.NewWorld(TickRate)
+
 	blockingPool := pool.NewPool(numCpus)
 
 	dispatcher := network.NewDispatcher()
-	dispatcher.Register(protocol.RegisterRequestPacketId, account.NewRegisterHandler(db))
-	dispatcher.Register(protocol.LoginRequestPacketId, account.NewLoginHandler(db))
+	dispatcher.Register(protocol.RegisterReqPacketId, account.NewRegisterHandler(db))
+	dispatcher.Register(protocol.LoginReqPacketId, account.NewLoginHandler(db))
+	dispatcher.Register(protocol.MyCharactersListReqPacketId, account.NewMyCharactersListHandler(db))
+	dispatcher.Register(protocol.CastSpellReqPacketId, combat.NewCastSpellHandler(world))
 
 	server := network.NewServer()
 
@@ -62,18 +68,17 @@ func main() {
 	addr := fmt.Sprintf("%s:%d", config.Host, config.Port)
 	go server.Listen(addr)
 
-	world := zurvan.NewWorld(TickRate)
-
 	world.PushCommands(
 		zurvan.NewAddResourceCommand(server.SessionsManager),
 		zurvan.NewAddResourceCommand(server.SessionsManager.NonBlocking),
 		zurvan.NewAddResourceCommand(dispatcher),
+		zurvan.NewAddResourceCommand(util.NewSyncMap[uint32, zurvan.Entity]()),
+		zurvan.NewAddResourceCommand(util.NewSyncMap[uint32, models.Spell]()),
 	)
 
 	world.AddSystems(
 		zurvan.BuildStageSystems(zurvan.PreUpdateStage,
 			&core.NetworkReceiveSystem{},
-			&combat.StatCalculationSystem{},
 		),
 	)
 
@@ -81,6 +86,9 @@ func main() {
 		zurvan.BuildStageSystems(zurvan.FixedUpdateStage,
 			&character.ExperienceSystem{},
 			&character.LevelUpSystem{},
+			&character.StatCalculationSystem{},
+			&combat.CastSpellSystem{},
+			&combat.FireSpellSystem{},
 			&combat.TakeDamageSystem{},
 			&combat.TakeHealSystem{},
 		),
@@ -88,6 +96,8 @@ func main() {
 
 	world.AddSystems(
 		zurvan.BuildStageSystems(zurvan.UpdateStage,
+			&combat.CastingSpellSystem{},
+			&combat.TakeOverTimeSystem{},
 			&combat.RegenerationSystem{},
 		),
 	)
