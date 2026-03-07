@@ -53,6 +53,7 @@ func main() {
 	dispatcher.Register(protocol.RegisterReqPacketId, account.NewRegisterHandler(db))
 	dispatcher.Register(protocol.LoginReqPacketId, account.NewLoginHandler(db))
 	dispatcher.Register(protocol.MyCharactersListReqPacketId, account.NewMyCharactersListHandler(db))
+	dispatcher.Register(protocol.CharacterJoinReqPacketId, account.NewCharacterJoinHandler(db, world))
 	dispatcher.Register(protocol.CastSpellReqPacketId, combat.NewCastSpellHandler(world))
 
 	server := network.NewServer()
@@ -79,13 +80,14 @@ func main() {
 	world.AddSystems(
 		zurvan.BuildStageSystems(zurvan.PreUpdateStage,
 			&core.NetworkReceiveSystem{},
+			&character.JoinWorldSystem{},
+			&character.ExperienceSystem{},
+			&character.LevelUpSystem{},
 		),
 	)
 
 	world.AddSystems(
 		zurvan.BuildStageSystems(zurvan.FixedUpdateStage,
-			&character.ExperienceSystem{},
-			&character.LevelUpSystem{},
 			&character.StatCalculationSystem{},
 			&combat.CastSpellSystem{},
 			&combat.FireSpellSystem{},

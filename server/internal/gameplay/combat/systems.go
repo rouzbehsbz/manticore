@@ -68,9 +68,9 @@ func (c *CastingSpellSystem) Update(w *zurvan.World, dt time.Duration) {
 
 				w.EmitEvents(
 					FireSpellEvent{
-						Caster: e[i],
-						Target: cs[i].Target,
-						Spell:  cs[i].Spell,
+						Caster:      e[i],
+						Target:      cs[i].Target,
+						SpellEffect: cs[i].Spell.Effect,
 					},
 				)
 			}
@@ -85,18 +85,28 @@ func (f *FireSpellSystem) Update(w *zurvan.World, dt time.Duration) {
 
 	// maybe need to generate the spell entity in the map and
 	// calculate the distance before firing
-	//
-	// also calculate final amount of spell based on caster stats
 
 	for _, event := range events {
-		spellEffect := event.Spell.Effect
+		os := zurvan.QueryOne1[character.OffensiveStats](w, event.Caster)
 
-		switch spellEffect.Type {
+		accuracyPerc := 0.5 * os.Accuracy / (os.Accuracy + 100)
+		if rand.Float64() > accuracyPerc {
+			continue
+		}
+
+		amount := event.SpellEffect.Amount + (os.SpellPower * event.SpellEffect.Coefficient)
+
+		criticalPerc := 0.5 * os.CriticalRating / (os.CriticalRating + 100)
+		if rand.Float64() <= criticalPerc {
+			amount *= 1.5
+		}
+
+		switch event.SpellEffect.Type {
 		case models.DamageEffect:
 			w.EmitEvents(
 				TakeDamageEvent{
 					Target: event.Target,
-					Amount: spellEffect.Amount,
+					Amount: amount,
 				},
 			)
 
@@ -104,7 +114,7 @@ func (f *FireSpellSystem) Update(w *zurvan.World, dt time.Duration) {
 			w.EmitEvents(
 				TakeHealEvent{
 					Target: event.Target,
-					Amount: spellEffect.Amount,
+					Amount: amount,
 				},
 			)
 
@@ -113,8 +123,9 @@ func (f *FireSpellSystem) Update(w *zurvan.World, dt time.Duration) {
 				zurvan.NewSetComponentsCommand(
 					event.Target,
 					TakingOverTime{
-						SpellEffect:   spellEffect,
-						RemainingTime: spellEffect.Duration,
+						SpellEffectType: event.SpellEffect.Type,
+						Amount:          amount,
+						RemainingTime:   event.SpellEffect.Duration,
 					},
 				),
 			)
@@ -124,8 +135,9 @@ func (f *FireSpellSystem) Update(w *zurvan.World, dt time.Duration) {
 				zurvan.NewSetComponentsCommand(
 					event.Target,
 					TakingOverTime{
-						SpellEffect:   spellEffect,
-						RemainingTime: spellEffect.Duration,
+						SpellEffectType: event.SpellEffect.Type,
+						Amount:          amount,
+						RemainingTime:   event.SpellEffect.Duration,
 					},
 				),
 			)
@@ -138,12 +150,12 @@ type TakeOverTimeSystem struct{}
 func (t *TakeOverTimeSystem) Update(w *zurvan.World, dt time.Duration) {
 	zurvan.QueryMany1[TakingOverTime](w, func(e []zurvan.Entity, tot []TakingOverTime) {
 		for i, _ := range e {
-			switch tot[i].SpellEffect.Type {
+			switch tot[i].SpellEffectType {
 			case models.DamageOverTimeEffect:
 				w.EmitEvents(
 					TakeDamageEvent{
 						Target: e[i],
-						Amount: tot[i].SpellEffect.Amount,
+						Amount: tot[i].Amount,
 					},
 				)
 
@@ -151,12 +163,12 @@ func (t *TakeOverTimeSystem) Update(w *zurvan.World, dt time.Duration) {
 				w.EmitEvents(
 					TakeHealEvent{
 						Target: e[i],
-						Amount: tot[i].SpellEffect.Amount,
+						Amount: tot[i].Amount,
 					},
 				)
 			}
 
-			tot[i].RemainingTime -= dt
+			tot[i].RemainingTime -= dt // need to revise ? i think its wrong based on every tick
 
 			if tot[i].RemainingTime <= 0 {
 				w.PushCommands(
@@ -204,7 +216,11 @@ func (t *TakeDamageSystem) Update(w *zurvan.World, dt time.Duration) {
 		h.Current -= finalDamage
 		h.Current = min(h.Current, h.Max)
 
-		// must handle death event
+		w.EmitEvents(
+			DeathEvent{
+				Entity: event.Target,
+			},
+		)
 	}
 }
 

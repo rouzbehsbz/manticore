@@ -12,8 +12,10 @@ message Packet {
     RegisterRes register_res = 6;
     MyCharactersListReq my_characters_list_req = 7;
     MyCharactersListRes my_characters_list_res = 8;
-    CastSpellReq cast_spell_req = 9;
-    CastSpellRes cast_spell_res = 10;
+    CharacterJoinReq character_join_req = 9;
+    CharacterJoinRes character_join_res = 10;
+    CastSpellReq cast_spell_req = 11;
+    CastSpellRes cast_spell_res = 12;
   }
 }
 
@@ -42,6 +44,11 @@ message MyCharacter {
 message MyCharactersListRes {
     repeated MyCharacter characters = 1;
 }
+
+message CharacterJoinReq {
+    uint32 id = 1;
+}
+message CharacterJoinRes {}
 
 message CastSpellReq {
     uint32 spell_id = 1;

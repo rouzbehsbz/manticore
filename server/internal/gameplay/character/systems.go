@@ -7,6 +7,28 @@ import (
 	"github.com/rouzbehsbz/zurvan"
 )
 
+type JoinWorldSystem struct{}
+
+func (j *JoinWorldSystem) Update(w *zurvan.World, dt time.Duration) {
+	characters, _ := Characters(w)
+	events := zurvan.OnEvent[JoinsWorldEvent](w)
+
+	for _, event := range events {
+		characters.Insert(event.Id, event.Character)
+
+		w.PushCommands(
+			zurvan.NewSetComponentsCommand(event.Character,
+				Level{},
+				PrimaryStats{},
+				Health{},
+				Mana{},
+				DefensiveStats{},
+				OffensiveStats{},
+			),
+		)
+	}
+}
+
 type ExperienceSystem struct{}
 
 func (e *ExperienceSystem) Update(w *zurvan.World, dt time.Duration) {
@@ -43,7 +65,7 @@ func (l *LevelUpSystem) Update(w *zurvan.World, dt time.Duration) {
 
 		lvl.Value += 1
 		lvl.Xp = lvl.Xp - lvl.NextLevelXpNeeded
-		lvl.NextLevelXpNeeded = lvl.Value * 100
+		lvl.NextLevelXpNeeded = int(float64(100) * math.Pow(float64(lvl.Value), 1.5))
 
 		w.EmitEvents(
 			RecalculateStatsEvent{

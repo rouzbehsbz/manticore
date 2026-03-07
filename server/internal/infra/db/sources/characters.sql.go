@@ -9,6 +9,29 @@ import (
 	"context"
 )
 
+const getCharacterById = `-- name: GetCharacterById :one
+SELECT id, account_id, nickname, level, xp, vitality, intelligence, willpower, dexterity, spirit, created_at FROM characters WHERE id = $1
+`
+
+func (q *Queries) GetCharacterById(ctx context.Context, id int32) (Character, error) {
+	row := q.db.QueryRow(ctx, getCharacterById, id)
+	var i Character
+	err := row.Scan(
+		&i.ID,
+		&i.AccountID,
+		&i.Nickname,
+		&i.Level,
+		&i.Xp,
+		&i.Vitality,
+		&i.Intelligence,
+		&i.Willpower,
+		&i.Dexterity,
+		&i.Spirit,
+		&i.CreatedAt,
+	)
+	return i, err
+}
+
 const getCharactersByAccountId = `-- name: GetCharactersByAccountId :many
 SELECT id, account_id, nickname, level, xp, vitality, intelligence, willpower, dexterity, spirit, created_at FROM characters WHERE account_id = $1
 `

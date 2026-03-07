@@ -6,11 +6,13 @@ import (
 	"regexp"
 
 	"github.com/rouzbehsbz/manticore/server/internal/common"
+	"github.com/rouzbehsbz/manticore/server/internal/gameplay/character"
 	"github.com/rouzbehsbz/manticore/server/internal/infra/db"
 	"github.com/rouzbehsbz/manticore/server/internal/infra/db/sources"
 	"github.com/rouzbehsbz/manticore/server/internal/models"
 	"github.com/rouzbehsbz/manticore/server/pkg/network/protocol"
 	"github.com/rouzbehsbz/manticore/server/pkg/network/session"
+	"github.com/rouzbehsbz/zurvan"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -125,7 +127,7 @@ func NewMyCharactersListHandler(db *db.Db) *MyCharactersListHandler {
 	}
 }
 
-func (m *MyCharactersListHandler) successResponse(session *session.Session, myCharacters []*protocol.MyCharacter) {
+func (m *MyCharactersListHandler) successRes(session *session.Session, myCharacters []*protocol.MyCharacter) {
 	session.Write(protocol.BuildMyCharactersListResPacket(myCharacters))
 }
 
@@ -144,7 +146,54 @@ func (m *MyCharactersListHandler) Handle(rp session.ReceivedPacket) {
 		characters = append(characters, models.MapCharacterToMyCharacterPacket(character))
 	}
 
-	m.successResponse(rp.Session, characters)
+	m.successRes(rp.Session, characters)
+}
+
+type CharacterJoinHandler struct {
+	db    *db.Db
+	world *zurvan.World
+}
+
+func NewCharacterJoinHandler(db *db.Db, world *zurvan.World) *CharacterJoinHandler {
+	return &CharacterJoinHandler{
+		db:    db,
+		world: world,
+	}
+}
+
+func (c *CharacterJoinHandler) successRes(session *session.Session) {
+	session.Write(protocol.BuildCharacterJoinResPacket())
+}
+
+func (c *CharacterJoinHandler) Handle(rp session.ReceivedPacket) {
+	if !rp.Session.IsAuthenticated() || rp.Session.IsCharacterSelected() {
+		common.ErrorRes(rp.Session, common.UnauthorizedErrorMsg)
+		return
+	}
+
+	ctx := context.Background()
+	payload := rp.Packet.Payload.(*protocol.Packet_CharacterJoinReq)
+
+	id := payload.CharacterJoinReq.Id
+
+	char, err := c.db.Q.GetCharacterById(ctx, int32(id))
+	if err != nil {
+		common.ErrorRes(rp.Session, "Invalid character.")
+		return
+	}
+
+	rp.Session.CharacterId = uint32(char.ID)
+
+	entity := c.world.Spawn()
+
+	c.world.EmitEvents(
+		character.JoinsWorldEvent{
+			Character: entity,
+			Id:        uint32(char.ID),
+		},
+	)
+
+	c.successRes(rp.Session)
 }
 
 func isUsernameValid(username string) error {

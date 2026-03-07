@@ -9,10 +9,6 @@ func Characters(w *zurvan.World) (*util.SyncMap[uint32, zurvan.Entity], bool) {
 	return zurvan.Resource[*util.SyncMap[uint32, zurvan.Entity]](w)
 }
 
-type Character struct {
-	Id int
-}
-
 type Level struct {
 	Value             int
 	Xp                int
@@ -48,6 +44,11 @@ type OffensiveStats struct {
 	SpellPower     float64
 	CriticalRating float64
 	Accuracy       float64
+}
+
+type JoinsWorldEvent struct {
+	Character zurvan.Entity
+	Id        uint32
 }
 
 type LevelUpEvent struct {

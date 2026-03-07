@@ -21,9 +21,10 @@ const (
 )
 
 type SpellEffect struct {
-	Type     EffectType
-	Amount   float64
-	Duration time.Duration
+	Type        EffectType
+	Amount      float64
+	Coefficient float64
+	Duration    time.Duration
 }
 
 type Spell struct {
