@@ -1,30 +1,68 @@
 package character
 
 import (
+	"context"
 	"math"
 	"time"
 
+	"github.com/rouzbehsbz/manticore/server/internal/infra/db"
 	"github.com/rouzbehsbz/zurvan"
 )
+
+type LoadSystem struct {
+	db *db.Db
+}
+
+func NewLoadSystem(db *db.Db) *LoadSystem {
+	return &LoadSystem{
+		db: db,
+	}
+}
+
+func (l *LoadSystem) Update(w *zurvan.World, dt time.Duration) {
+	characters, _ := CharactersMap(w)
+
+	rawCharacters, err := l.db.Q.GetAllCharacters(context.Background())
+	if err != nil {
+		panic(err.Error())
+	}
+
+	for _, character := range rawCharacters {
+		characters.Insert(uint32(character.ID), character)
+	}
+}
 
 type JoinWorldSystem struct{}
 
 func (j *JoinWorldSystem) Update(w *zurvan.World, dt time.Duration) {
-	characters, _ := Characters(w)
+	characters, _ := CharactersMap(w)
+
 	events := zurvan.OnEvent[JoinsWorldEvent](w)
 
 	for _, event := range events {
-		characters.Insert(event.Id, event.Character)
+		char, _ := characters.Get(event.Id)
 
 		w.PushCommands(
 			zurvan.NewSetComponentsCommand(event.Character,
-				Level{},
-				PrimaryStats{},
+				NewLevel(int(char.Level), int(char.Xp)),
+				PrimaryStats{
+					Vitality:     float64(char.Vitality),
+					Intelligence: float64(char.Intelligence),
+					Willpower:    float64(char.Willpower),
+					Dexterity:    float64(char.Dexterity),
+					Spirit:       float64(char.Spirit),
+				},
 				Health{},
 				Mana{},
 				DefensiveStats{},
 				OffensiveStats{},
 			),
+		)
+
+		w.EmitEvents(
+			RecalculateStatsEvent{
+				Entity: event.Character,
+			},
 		)
 	}
 }

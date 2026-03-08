@@ -1,11 +1,18 @@
 package character
 
 import (
+	"math"
+
+	"github.com/rouzbehsbz/manticore/server/internal/infra/db/sources"
 	"github.com/rouzbehsbz/manticore/server/pkg/util"
 	"github.com/rouzbehsbz/zurvan"
 )
 
-func Characters(w *zurvan.World) (*util.SyncMap[uint32, zurvan.Entity], bool) {
+func CharactersMap(w *zurvan.World) (*util.SyncMap[uint32, sources.Character], bool) {
+	return zurvan.Resource[*util.SyncMap[uint32, sources.Character]](w)
+}
+
+func CharacterEntityMap(w *zurvan.World) (*util.SyncMap[uint32, zurvan.Entity], bool) {
 	return zurvan.Resource[*util.SyncMap[uint32, zurvan.Entity]](w)
 }
 
@@ -13,6 +20,14 @@ type Level struct {
 	Value             int
 	Xp                int
 	NextLevelXpNeeded int
+}
+
+func NewLevel(value, xp int) Level {
+	return Level{
+		Value:             value,
+		Xp:                xp,
+		NextLevelXpNeeded: int(float64(100) * math.Pow(float64(value), 1.5)),
+	}
 }
 
 type PrimaryStats struct {

@@ -149,6 +149,46 @@ func (m *MyCharactersListHandler) Handle(rp session.ReceivedPacket) {
 	m.successRes(rp.Session, characters)
 }
 
+type CharacterCreateHandler struct {
+	db *db.Db
+}
+
+func NewCharacterCreateHandler(db *db.Db) *CharacterCreateHandler {
+	return &CharacterCreateHandler{
+		db: db,
+	}
+}
+
+func (c *CharacterCreateHandler) successRes(session *session.Session) {
+	session.Write(protocol.BuildCharacterCreateResPacket())
+}
+
+func (c *CharacterCreateHandler) Handle(rp session.ReceivedPacket) {
+	if !rp.Session.IsAuthenticated() || rp.Session.IsCharacterSelected() {
+		common.ErrorRes(rp.Session, common.UnauthorizedErrorMsg)
+		return
+	}
+
+	ctx := context.Background()
+	payload := rp.Packet.Payload.(*protocol.Packet_CharacterCreateReq)
+
+	nickname := payload.CharacterCreateReq.Nickname
+
+	_, err := c.db.Q.CreateCharacter(ctx, sources.CreateCharacterParams{
+		Nickname:     nickname,
+		Vitality:     12,
+		Intelligence: 12,
+		Willpower:    12,
+		Dexterity:    12,
+		Spirit:       12,
+	})
+	if err != nil {
+		common.ErrorRes(rp.Session, "This nickname is already taken.")
+	}
+
+	c.successRes(rp.Session)
+}
+
 type CharacterJoinHandler struct {
 	db    *db.Db
 	world *zurvan.World

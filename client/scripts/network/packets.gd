@@ -681,29 +681,83 @@ class Packet:
 		service.field = __id
 		data[__id.tag] = service
 		
-		__login_request = PBField.new("login_request", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
+		__error_res = PBField.new("error_res", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
 		service = PBServiceField.new()
-		service.field = __login_request
-		service.func_ref = Callable(self, "new_login_request")
-		data[__login_request.tag] = service
+		service.field = __error_res
+		service.func_ref = Callable(self, "new_error_res")
+		data[__error_res.tag] = service
 		
-		__login_response = PBField.new("login_response", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 3, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
+		__login_req = PBField.new("login_req", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 3, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
 		service = PBServiceField.new()
-		service.field = __login_response
-		service.func_ref = Callable(self, "new_login_response")
-		data[__login_response.tag] = service
+		service.field = __login_req
+		service.func_ref = Callable(self, "new_login_req")
+		data[__login_req.tag] = service
 		
-		__register_request = PBField.new("register_request", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 4, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
+		__login_res = PBField.new("login_res", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 4, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
 		service = PBServiceField.new()
-		service.field = __register_request
-		service.func_ref = Callable(self, "new_register_request")
-		data[__register_request.tag] = service
+		service.field = __login_res
+		service.func_ref = Callable(self, "new_login_res")
+		data[__login_res.tag] = service
 		
-		__register_response = PBField.new("register_response", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 5, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
+		__register_req = PBField.new("register_req", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 5, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
 		service = PBServiceField.new()
-		service.field = __register_response
-		service.func_ref = Callable(self, "new_register_response")
-		data[__register_response.tag] = service
+		service.field = __register_req
+		service.func_ref = Callable(self, "new_register_req")
+		data[__register_req.tag] = service
+		
+		__register_res = PBField.new("register_res", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 6, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
+		service = PBServiceField.new()
+		service.field = __register_res
+		service.func_ref = Callable(self, "new_register_res")
+		data[__register_res.tag] = service
+		
+		__my_characters_list_req = PBField.new("my_characters_list_req", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 7, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
+		service = PBServiceField.new()
+		service.field = __my_characters_list_req
+		service.func_ref = Callable(self, "new_my_characters_list_req")
+		data[__my_characters_list_req.tag] = service
+		
+		__my_characters_list_res = PBField.new("my_characters_list_res", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 8, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
+		service = PBServiceField.new()
+		service.field = __my_characters_list_res
+		service.func_ref = Callable(self, "new_my_characters_list_res")
+		data[__my_characters_list_res.tag] = service
+		
+		__character_create_req = PBField.new("character_create_req", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 9, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
+		service = PBServiceField.new()
+		service.field = __character_create_req
+		service.func_ref = Callable(self, "new_character_create_req")
+		data[__character_create_req.tag] = service
+		
+		__character_create_res = PBField.new("character_create_res", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 10, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
+		service = PBServiceField.new()
+		service.field = __character_create_res
+		service.func_ref = Callable(self, "new_character_create_res")
+		data[__character_create_res.tag] = service
+		
+		__character_join_req = PBField.new("character_join_req", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 11, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
+		service = PBServiceField.new()
+		service.field = __character_join_req
+		service.func_ref = Callable(self, "new_character_join_req")
+		data[__character_join_req.tag] = service
+		
+		__character_join_res = PBField.new("character_join_res", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 12, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
+		service = PBServiceField.new()
+		service.field = __character_join_res
+		service.func_ref = Callable(self, "new_character_join_res")
+		data[__character_join_res.tag] = service
+		
+		__cast_spell_req = PBField.new("cast_spell_req", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 13, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
+		service = PBServiceField.new()
+		service.field = __cast_spell_req
+		service.func_ref = Callable(self, "new_cast_spell_req")
+		data[__cast_spell_req.tag] = service
+		
+		__cast_spell_res = PBField.new("cast_spell_res", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 14, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
+		service = PBServiceField.new()
+		service.field = __cast_spell_res
+		service.func_ref = Callable(self, "new_cast_spell_res")
+		data[__cast_spell_res.tag] = service
 		
 	var data = {}
 	
@@ -720,89 +774,512 @@ class Packet:
 	func set_id(value : int) -> void:
 		__id.value = value
 	
-	var __login_request: PBField
-	func has_login_request() -> bool:
-		if __login_request.value != null:
+	var __error_res: PBField
+	func has_error_res() -> bool:
+		if __error_res.value != null:
 			return true
 		return false
-	func get_login_request() -> LoginRequest:
-		return __login_request.value
-	func clear_login_request() -> void:
+	func get_error_res() -> ErrorRes:
+		return __error_res.value
+	func clear_error_res() -> void:
 		data[2].state = PB_SERVICE_STATE.UNFILLED
-		__login_request.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
-	func new_login_request() -> LoginRequest:
+		__error_res.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+	func new_error_res() -> ErrorRes:
 		data[2].state = PB_SERVICE_STATE.FILLED
-		__login_response.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		__login_req.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
 		data[3].state = PB_SERVICE_STATE.UNFILLED
-		__register_request.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		__login_res.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
 		data[4].state = PB_SERVICE_STATE.UNFILLED
-		__register_response.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		__register_req.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
 		data[5].state = PB_SERVICE_STATE.UNFILLED
-		__login_request.value = LoginRequest.new()
-		return __login_request.value
+		__register_res.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[6].state = PB_SERVICE_STATE.UNFILLED
+		__my_characters_list_req.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[7].state = PB_SERVICE_STATE.UNFILLED
+		__my_characters_list_res.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[8].state = PB_SERVICE_STATE.UNFILLED
+		__character_create_req.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[9].state = PB_SERVICE_STATE.UNFILLED
+		__character_create_res.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[10].state = PB_SERVICE_STATE.UNFILLED
+		__character_join_req.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[11].state = PB_SERVICE_STATE.UNFILLED
+		__character_join_res.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[12].state = PB_SERVICE_STATE.UNFILLED
+		__cast_spell_req.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[13].state = PB_SERVICE_STATE.UNFILLED
+		__cast_spell_res.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[14].state = PB_SERVICE_STATE.UNFILLED
+		__error_res.value = ErrorRes.new()
+		return __error_res.value
 	
-	var __login_response: PBField
-	func has_login_response() -> bool:
-		if __login_response.value != null:
+	var __login_req: PBField
+	func has_login_req() -> bool:
+		if __login_req.value != null:
 			return true
 		return false
-	func get_login_response() -> LoginResponse:
-		return __login_response.value
-	func clear_login_response() -> void:
+	func get_login_req() -> LoginReq:
+		return __login_req.value
+	func clear_login_req() -> void:
 		data[3].state = PB_SERVICE_STATE.UNFILLED
-		__login_response.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
-	func new_login_response() -> LoginResponse:
-		__login_request.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		__login_req.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+	func new_login_req() -> LoginReq:
+		__error_res.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
 		data[2].state = PB_SERVICE_STATE.UNFILLED
 		data[3].state = PB_SERVICE_STATE.FILLED
-		__register_request.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		__login_res.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
 		data[4].state = PB_SERVICE_STATE.UNFILLED
-		__register_response.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		__register_req.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
 		data[5].state = PB_SERVICE_STATE.UNFILLED
-		__login_response.value = LoginResponse.new()
-		return __login_response.value
+		__register_res.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[6].state = PB_SERVICE_STATE.UNFILLED
+		__my_characters_list_req.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[7].state = PB_SERVICE_STATE.UNFILLED
+		__my_characters_list_res.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[8].state = PB_SERVICE_STATE.UNFILLED
+		__character_create_req.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[9].state = PB_SERVICE_STATE.UNFILLED
+		__character_create_res.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[10].state = PB_SERVICE_STATE.UNFILLED
+		__character_join_req.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[11].state = PB_SERVICE_STATE.UNFILLED
+		__character_join_res.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[12].state = PB_SERVICE_STATE.UNFILLED
+		__cast_spell_req.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[13].state = PB_SERVICE_STATE.UNFILLED
+		__cast_spell_res.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[14].state = PB_SERVICE_STATE.UNFILLED
+		__login_req.value = LoginReq.new()
+		return __login_req.value
 	
-	var __register_request: PBField
-	func has_register_request() -> bool:
-		if __register_request.value != null:
+	var __login_res: PBField
+	func has_login_res() -> bool:
+		if __login_res.value != null:
 			return true
 		return false
-	func get_register_request() -> RegisterRequest:
-		return __register_request.value
-	func clear_register_request() -> void:
+	func get_login_res() -> LoginRes:
+		return __login_res.value
+	func clear_login_res() -> void:
 		data[4].state = PB_SERVICE_STATE.UNFILLED
-		__register_request.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
-	func new_register_request() -> RegisterRequest:
-		__login_request.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		__login_res.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+	func new_login_res() -> LoginRes:
+		__error_res.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
 		data[2].state = PB_SERVICE_STATE.UNFILLED
-		__login_response.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		__login_req.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
 		data[3].state = PB_SERVICE_STATE.UNFILLED
 		data[4].state = PB_SERVICE_STATE.FILLED
-		__register_response.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		__register_req.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
 		data[5].state = PB_SERVICE_STATE.UNFILLED
-		__register_request.value = RegisterRequest.new()
-		return __register_request.value
+		__register_res.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[6].state = PB_SERVICE_STATE.UNFILLED
+		__my_characters_list_req.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[7].state = PB_SERVICE_STATE.UNFILLED
+		__my_characters_list_res.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[8].state = PB_SERVICE_STATE.UNFILLED
+		__character_create_req.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[9].state = PB_SERVICE_STATE.UNFILLED
+		__character_create_res.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[10].state = PB_SERVICE_STATE.UNFILLED
+		__character_join_req.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[11].state = PB_SERVICE_STATE.UNFILLED
+		__character_join_res.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[12].state = PB_SERVICE_STATE.UNFILLED
+		__cast_spell_req.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[13].state = PB_SERVICE_STATE.UNFILLED
+		__cast_spell_res.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[14].state = PB_SERVICE_STATE.UNFILLED
+		__login_res.value = LoginRes.new()
+		return __login_res.value
 	
-	var __register_response: PBField
-	func has_register_response() -> bool:
-		if __register_response.value != null:
+	var __register_req: PBField
+	func has_register_req() -> bool:
+		if __register_req.value != null:
 			return true
 		return false
-	func get_register_response() -> RegisterResponse:
-		return __register_response.value
-	func clear_register_response() -> void:
+	func get_register_req() -> RegisterReq:
+		return __register_req.value
+	func clear_register_req() -> void:
 		data[5].state = PB_SERVICE_STATE.UNFILLED
-		__register_response.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
-	func new_register_response() -> RegisterResponse:
-		__login_request.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		__register_req.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+	func new_register_req() -> RegisterReq:
+		__error_res.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
 		data[2].state = PB_SERVICE_STATE.UNFILLED
-		__login_response.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		__login_req.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
 		data[3].state = PB_SERVICE_STATE.UNFILLED
-		__register_request.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		__login_res.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
 		data[4].state = PB_SERVICE_STATE.UNFILLED
 		data[5].state = PB_SERVICE_STATE.FILLED
-		__register_response.value = RegisterResponse.new()
-		return __register_response.value
+		__register_res.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[6].state = PB_SERVICE_STATE.UNFILLED
+		__my_characters_list_req.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[7].state = PB_SERVICE_STATE.UNFILLED
+		__my_characters_list_res.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[8].state = PB_SERVICE_STATE.UNFILLED
+		__character_create_req.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[9].state = PB_SERVICE_STATE.UNFILLED
+		__character_create_res.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[10].state = PB_SERVICE_STATE.UNFILLED
+		__character_join_req.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[11].state = PB_SERVICE_STATE.UNFILLED
+		__character_join_res.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[12].state = PB_SERVICE_STATE.UNFILLED
+		__cast_spell_req.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[13].state = PB_SERVICE_STATE.UNFILLED
+		__cast_spell_res.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[14].state = PB_SERVICE_STATE.UNFILLED
+		__register_req.value = RegisterReq.new()
+		return __register_req.value
+	
+	var __register_res: PBField
+	func has_register_res() -> bool:
+		if __register_res.value != null:
+			return true
+		return false
+	func get_register_res() -> RegisterRes:
+		return __register_res.value
+	func clear_register_res() -> void:
+		data[6].state = PB_SERVICE_STATE.UNFILLED
+		__register_res.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+	func new_register_res() -> RegisterRes:
+		__error_res.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[2].state = PB_SERVICE_STATE.UNFILLED
+		__login_req.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[3].state = PB_SERVICE_STATE.UNFILLED
+		__login_res.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[4].state = PB_SERVICE_STATE.UNFILLED
+		__register_req.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[5].state = PB_SERVICE_STATE.UNFILLED
+		data[6].state = PB_SERVICE_STATE.FILLED
+		__my_characters_list_req.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[7].state = PB_SERVICE_STATE.UNFILLED
+		__my_characters_list_res.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[8].state = PB_SERVICE_STATE.UNFILLED
+		__character_create_req.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[9].state = PB_SERVICE_STATE.UNFILLED
+		__character_create_res.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[10].state = PB_SERVICE_STATE.UNFILLED
+		__character_join_req.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[11].state = PB_SERVICE_STATE.UNFILLED
+		__character_join_res.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[12].state = PB_SERVICE_STATE.UNFILLED
+		__cast_spell_req.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[13].state = PB_SERVICE_STATE.UNFILLED
+		__cast_spell_res.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[14].state = PB_SERVICE_STATE.UNFILLED
+		__register_res.value = RegisterRes.new()
+		return __register_res.value
+	
+	var __my_characters_list_req: PBField
+	func has_my_characters_list_req() -> bool:
+		if __my_characters_list_req.value != null:
+			return true
+		return false
+	func get_my_characters_list_req() -> MyCharactersListReq:
+		return __my_characters_list_req.value
+	func clear_my_characters_list_req() -> void:
+		data[7].state = PB_SERVICE_STATE.UNFILLED
+		__my_characters_list_req.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+	func new_my_characters_list_req() -> MyCharactersListReq:
+		__error_res.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[2].state = PB_SERVICE_STATE.UNFILLED
+		__login_req.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[3].state = PB_SERVICE_STATE.UNFILLED
+		__login_res.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[4].state = PB_SERVICE_STATE.UNFILLED
+		__register_req.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[5].state = PB_SERVICE_STATE.UNFILLED
+		__register_res.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[6].state = PB_SERVICE_STATE.UNFILLED
+		data[7].state = PB_SERVICE_STATE.FILLED
+		__my_characters_list_res.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[8].state = PB_SERVICE_STATE.UNFILLED
+		__character_create_req.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[9].state = PB_SERVICE_STATE.UNFILLED
+		__character_create_res.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[10].state = PB_SERVICE_STATE.UNFILLED
+		__character_join_req.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[11].state = PB_SERVICE_STATE.UNFILLED
+		__character_join_res.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[12].state = PB_SERVICE_STATE.UNFILLED
+		__cast_spell_req.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[13].state = PB_SERVICE_STATE.UNFILLED
+		__cast_spell_res.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[14].state = PB_SERVICE_STATE.UNFILLED
+		__my_characters_list_req.value = MyCharactersListReq.new()
+		return __my_characters_list_req.value
+	
+	var __my_characters_list_res: PBField
+	func has_my_characters_list_res() -> bool:
+		if __my_characters_list_res.value != null:
+			return true
+		return false
+	func get_my_characters_list_res() -> MyCharactersListRes:
+		return __my_characters_list_res.value
+	func clear_my_characters_list_res() -> void:
+		data[8].state = PB_SERVICE_STATE.UNFILLED
+		__my_characters_list_res.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+	func new_my_characters_list_res() -> MyCharactersListRes:
+		__error_res.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[2].state = PB_SERVICE_STATE.UNFILLED
+		__login_req.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[3].state = PB_SERVICE_STATE.UNFILLED
+		__login_res.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[4].state = PB_SERVICE_STATE.UNFILLED
+		__register_req.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[5].state = PB_SERVICE_STATE.UNFILLED
+		__register_res.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[6].state = PB_SERVICE_STATE.UNFILLED
+		__my_characters_list_req.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[7].state = PB_SERVICE_STATE.UNFILLED
+		data[8].state = PB_SERVICE_STATE.FILLED
+		__character_create_req.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[9].state = PB_SERVICE_STATE.UNFILLED
+		__character_create_res.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[10].state = PB_SERVICE_STATE.UNFILLED
+		__character_join_req.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[11].state = PB_SERVICE_STATE.UNFILLED
+		__character_join_res.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[12].state = PB_SERVICE_STATE.UNFILLED
+		__cast_spell_req.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[13].state = PB_SERVICE_STATE.UNFILLED
+		__cast_spell_res.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[14].state = PB_SERVICE_STATE.UNFILLED
+		__my_characters_list_res.value = MyCharactersListRes.new()
+		return __my_characters_list_res.value
+	
+	var __character_create_req: PBField
+	func has_character_create_req() -> bool:
+		if __character_create_req.value != null:
+			return true
+		return false
+	func get_character_create_req() -> CharacterCreateReq:
+		return __character_create_req.value
+	func clear_character_create_req() -> void:
+		data[9].state = PB_SERVICE_STATE.UNFILLED
+		__character_create_req.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+	func new_character_create_req() -> CharacterCreateReq:
+		__error_res.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[2].state = PB_SERVICE_STATE.UNFILLED
+		__login_req.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[3].state = PB_SERVICE_STATE.UNFILLED
+		__login_res.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[4].state = PB_SERVICE_STATE.UNFILLED
+		__register_req.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[5].state = PB_SERVICE_STATE.UNFILLED
+		__register_res.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[6].state = PB_SERVICE_STATE.UNFILLED
+		__my_characters_list_req.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[7].state = PB_SERVICE_STATE.UNFILLED
+		__my_characters_list_res.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[8].state = PB_SERVICE_STATE.UNFILLED
+		data[9].state = PB_SERVICE_STATE.FILLED
+		__character_create_res.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[10].state = PB_SERVICE_STATE.UNFILLED
+		__character_join_req.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[11].state = PB_SERVICE_STATE.UNFILLED
+		__character_join_res.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[12].state = PB_SERVICE_STATE.UNFILLED
+		__cast_spell_req.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[13].state = PB_SERVICE_STATE.UNFILLED
+		__cast_spell_res.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[14].state = PB_SERVICE_STATE.UNFILLED
+		__character_create_req.value = CharacterCreateReq.new()
+		return __character_create_req.value
+	
+	var __character_create_res: PBField
+	func has_character_create_res() -> bool:
+		if __character_create_res.value != null:
+			return true
+		return false
+	func get_character_create_res() -> CharacterCreateRes:
+		return __character_create_res.value
+	func clear_character_create_res() -> void:
+		data[10].state = PB_SERVICE_STATE.UNFILLED
+		__character_create_res.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+	func new_character_create_res() -> CharacterCreateRes:
+		__error_res.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[2].state = PB_SERVICE_STATE.UNFILLED
+		__login_req.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[3].state = PB_SERVICE_STATE.UNFILLED
+		__login_res.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[4].state = PB_SERVICE_STATE.UNFILLED
+		__register_req.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[5].state = PB_SERVICE_STATE.UNFILLED
+		__register_res.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[6].state = PB_SERVICE_STATE.UNFILLED
+		__my_characters_list_req.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[7].state = PB_SERVICE_STATE.UNFILLED
+		__my_characters_list_res.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[8].state = PB_SERVICE_STATE.UNFILLED
+		__character_create_req.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[9].state = PB_SERVICE_STATE.UNFILLED
+		data[10].state = PB_SERVICE_STATE.FILLED
+		__character_join_req.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[11].state = PB_SERVICE_STATE.UNFILLED
+		__character_join_res.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[12].state = PB_SERVICE_STATE.UNFILLED
+		__cast_spell_req.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[13].state = PB_SERVICE_STATE.UNFILLED
+		__cast_spell_res.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[14].state = PB_SERVICE_STATE.UNFILLED
+		__character_create_res.value = CharacterCreateRes.new()
+		return __character_create_res.value
+	
+	var __character_join_req: PBField
+	func has_character_join_req() -> bool:
+		if __character_join_req.value != null:
+			return true
+		return false
+	func get_character_join_req() -> CharacterJoinReq:
+		return __character_join_req.value
+	func clear_character_join_req() -> void:
+		data[11].state = PB_SERVICE_STATE.UNFILLED
+		__character_join_req.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+	func new_character_join_req() -> CharacterJoinReq:
+		__error_res.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[2].state = PB_SERVICE_STATE.UNFILLED
+		__login_req.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[3].state = PB_SERVICE_STATE.UNFILLED
+		__login_res.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[4].state = PB_SERVICE_STATE.UNFILLED
+		__register_req.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[5].state = PB_SERVICE_STATE.UNFILLED
+		__register_res.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[6].state = PB_SERVICE_STATE.UNFILLED
+		__my_characters_list_req.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[7].state = PB_SERVICE_STATE.UNFILLED
+		__my_characters_list_res.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[8].state = PB_SERVICE_STATE.UNFILLED
+		__character_create_req.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[9].state = PB_SERVICE_STATE.UNFILLED
+		__character_create_res.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[10].state = PB_SERVICE_STATE.UNFILLED
+		data[11].state = PB_SERVICE_STATE.FILLED
+		__character_join_res.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[12].state = PB_SERVICE_STATE.UNFILLED
+		__cast_spell_req.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[13].state = PB_SERVICE_STATE.UNFILLED
+		__cast_spell_res.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[14].state = PB_SERVICE_STATE.UNFILLED
+		__character_join_req.value = CharacterJoinReq.new()
+		return __character_join_req.value
+	
+	var __character_join_res: PBField
+	func has_character_join_res() -> bool:
+		if __character_join_res.value != null:
+			return true
+		return false
+	func get_character_join_res() -> CharacterJoinRes:
+		return __character_join_res.value
+	func clear_character_join_res() -> void:
+		data[12].state = PB_SERVICE_STATE.UNFILLED
+		__character_join_res.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+	func new_character_join_res() -> CharacterJoinRes:
+		__error_res.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[2].state = PB_SERVICE_STATE.UNFILLED
+		__login_req.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[3].state = PB_SERVICE_STATE.UNFILLED
+		__login_res.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[4].state = PB_SERVICE_STATE.UNFILLED
+		__register_req.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[5].state = PB_SERVICE_STATE.UNFILLED
+		__register_res.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[6].state = PB_SERVICE_STATE.UNFILLED
+		__my_characters_list_req.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[7].state = PB_SERVICE_STATE.UNFILLED
+		__my_characters_list_res.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[8].state = PB_SERVICE_STATE.UNFILLED
+		__character_create_req.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[9].state = PB_SERVICE_STATE.UNFILLED
+		__character_create_res.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[10].state = PB_SERVICE_STATE.UNFILLED
+		__character_join_req.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[11].state = PB_SERVICE_STATE.UNFILLED
+		data[12].state = PB_SERVICE_STATE.FILLED
+		__cast_spell_req.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[13].state = PB_SERVICE_STATE.UNFILLED
+		__cast_spell_res.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[14].state = PB_SERVICE_STATE.UNFILLED
+		__character_join_res.value = CharacterJoinRes.new()
+		return __character_join_res.value
+	
+	var __cast_spell_req: PBField
+	func has_cast_spell_req() -> bool:
+		if __cast_spell_req.value != null:
+			return true
+		return false
+	func get_cast_spell_req() -> CastSpellReq:
+		return __cast_spell_req.value
+	func clear_cast_spell_req() -> void:
+		data[13].state = PB_SERVICE_STATE.UNFILLED
+		__cast_spell_req.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+	func new_cast_spell_req() -> CastSpellReq:
+		__error_res.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[2].state = PB_SERVICE_STATE.UNFILLED
+		__login_req.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[3].state = PB_SERVICE_STATE.UNFILLED
+		__login_res.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[4].state = PB_SERVICE_STATE.UNFILLED
+		__register_req.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[5].state = PB_SERVICE_STATE.UNFILLED
+		__register_res.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[6].state = PB_SERVICE_STATE.UNFILLED
+		__my_characters_list_req.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[7].state = PB_SERVICE_STATE.UNFILLED
+		__my_characters_list_res.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[8].state = PB_SERVICE_STATE.UNFILLED
+		__character_create_req.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[9].state = PB_SERVICE_STATE.UNFILLED
+		__character_create_res.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[10].state = PB_SERVICE_STATE.UNFILLED
+		__character_join_req.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[11].state = PB_SERVICE_STATE.UNFILLED
+		__character_join_res.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[12].state = PB_SERVICE_STATE.UNFILLED
+		data[13].state = PB_SERVICE_STATE.FILLED
+		__cast_spell_res.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[14].state = PB_SERVICE_STATE.UNFILLED
+		__cast_spell_req.value = CastSpellReq.new()
+		return __cast_spell_req.value
+	
+	var __cast_spell_res: PBField
+	func has_cast_spell_res() -> bool:
+		if __cast_spell_res.value != null:
+			return true
+		return false
+	func get_cast_spell_res() -> CastSpellRes:
+		return __cast_spell_res.value
+	func clear_cast_spell_res() -> void:
+		data[14].state = PB_SERVICE_STATE.UNFILLED
+		__cast_spell_res.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+	func new_cast_spell_res() -> CastSpellRes:
+		__error_res.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[2].state = PB_SERVICE_STATE.UNFILLED
+		__login_req.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[3].state = PB_SERVICE_STATE.UNFILLED
+		__login_res.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[4].state = PB_SERVICE_STATE.UNFILLED
+		__register_req.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[5].state = PB_SERVICE_STATE.UNFILLED
+		__register_res.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[6].state = PB_SERVICE_STATE.UNFILLED
+		__my_characters_list_req.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[7].state = PB_SERVICE_STATE.UNFILLED
+		__my_characters_list_res.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[8].state = PB_SERVICE_STATE.UNFILLED
+		__character_create_req.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[9].state = PB_SERVICE_STATE.UNFILLED
+		__character_create_res.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[10].state = PB_SERVICE_STATE.UNFILLED
+		__character_join_req.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[11].state = PB_SERVICE_STATE.UNFILLED
+		__character_join_res.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[12].state = PB_SERVICE_STATE.UNFILLED
+		__cast_spell_req.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[13].state = PB_SERVICE_STATE.UNFILLED
+		data[14].state = PB_SERVICE_STATE.FILLED
+		__cast_spell_res.value = CastSpellRes.new()
+		return __cast_spell_res.value
 	
 	func _to_string() -> String:
 		return PBPacker.message_to_string(data)
@@ -825,7 +1302,52 @@ class Packet:
 			return PB_ERR.PARSE_INCOMPLETE
 		return result
 	
-class LoginRequest:
+class ErrorRes:
+	func _init():
+		var service
+		
+		__msg = PBField.new("msg", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
+		service = PBServiceField.new()
+		service.field = __msg
+		data[__msg.tag] = service
+		
+	var data = {}
+	
+	var __msg: PBField
+	func has_msg() -> bool:
+		if __msg.value != null:
+			return true
+		return false
+	func get_msg() -> String:
+		return __msg.value
+	func clear_msg() -> void:
+		data[1].state = PB_SERVICE_STATE.UNFILLED
+		__msg.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
+	func set_msg(value : String) -> void:
+		__msg.value = value
+	
+	func _to_string() -> String:
+		return PBPacker.message_to_string(data)
+		
+	func to_bytes() -> PackedByteArray:
+		return PBPacker.pack_message(data)
+		
+	func from_bytes(bytes : PackedByteArray, offset : int = 0, limit : int = -1) -> int:
+		var cur_limit = bytes.size()
+		if limit != -1:
+			cur_limit = limit
+		var result = PBPacker.unpack_message(data, bytes, offset, cur_limit)
+		if result == cur_limit:
+			if PBPacker.check_required(data):
+				if limit == -1:
+					return PB_ERR.NO_ERRORS
+			else:
+				return PB_ERR.REQUIRED_FIELDS
+		elif limit == -1 && result > 0:
+			return PB_ERR.PARSE_INCOMPLETE
+		return result
+	
+class LoginReq:
 	func _init():
 		var service
 		
@@ -888,47 +1410,11 @@ class LoginRequest:
 			return PB_ERR.PARSE_INCOMPLETE
 		return result
 	
-class LoginResponse:
+class LoginRes:
 	func _init():
 		var service
 		
-		__ok = PBField.new("ok", PB_DATA_TYPE.BOOL, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL])
-		service = PBServiceField.new()
-		service.field = __ok
-		data[__ok.tag] = service
-		
-		__msg = PBField.new("msg", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
-		service = PBServiceField.new()
-		service.field = __msg
-		data[__msg.tag] = service
-		
 	var data = {}
-	
-	var __ok: PBField
-	func has_ok() -> bool:
-		if __ok.value != null:
-			return true
-		return false
-	func get_ok() -> bool:
-		return __ok.value
-	func clear_ok() -> void:
-		data[1].state = PB_SERVICE_STATE.UNFILLED
-		__ok.value = DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL]
-	func set_ok(value : bool) -> void:
-		__ok.value = value
-	
-	var __msg: PBField
-	func has_msg() -> bool:
-		if __msg.value != null:
-			return true
-		return false
-	func get_msg() -> String:
-		return __msg.value
-	func clear_msg() -> void:
-		data[2].state = PB_SERVICE_STATE.UNFILLED
-		__msg.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
-	func set_msg(value : String) -> void:
-		__msg.value = value
 	
 	func _to_string() -> String:
 		return PBPacker.message_to_string(data)
@@ -951,7 +1437,7 @@ class LoginResponse:
 			return PB_ERR.PARSE_INCOMPLETE
 		return result
 	
-class RegisterRequest:
+class RegisterReq:
 	func _init():
 		var service
 		
@@ -1014,47 +1500,398 @@ class RegisterRequest:
 			return PB_ERR.PARSE_INCOMPLETE
 		return result
 	
-class RegisterResponse:
+class RegisterRes:
 	func _init():
 		var service
 		
-		__ok = PBField.new("ok", PB_DATA_TYPE.BOOL, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL])
-		service = PBServiceField.new()
-		service.field = __ok
-		data[__ok.tag] = service
+	var data = {}
+	
+	func _to_string() -> String:
+		return PBPacker.message_to_string(data)
 		
-		__msg = PBField.new("msg", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
-		service = PBServiceField.new()
-		service.field = __msg
-		data[__msg.tag] = service
+	func to_bytes() -> PackedByteArray:
+		return PBPacker.pack_message(data)
+		
+	func from_bytes(bytes : PackedByteArray, offset : int = 0, limit : int = -1) -> int:
+		var cur_limit = bytes.size()
+		if limit != -1:
+			cur_limit = limit
+		var result = PBPacker.unpack_message(data, bytes, offset, cur_limit)
+		if result == cur_limit:
+			if PBPacker.check_required(data):
+				if limit == -1:
+					return PB_ERR.NO_ERRORS
+			else:
+				return PB_ERR.REQUIRED_FIELDS
+		elif limit == -1 && result > 0:
+			return PB_ERR.PARSE_INCOMPLETE
+		return result
+	
+class MyCharactersListReq:
+	func _init():
+		var service
 		
 	var data = {}
 	
-	var __ok: PBField
-	func has_ok() -> bool:
-		if __ok.value != null:
-			return true
-		return false
-	func get_ok() -> bool:
-		return __ok.value
-	func clear_ok() -> void:
-		data[1].state = PB_SERVICE_STATE.UNFILLED
-		__ok.value = DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL]
-	func set_ok(value : bool) -> void:
-		__ok.value = value
+	func _to_string() -> String:
+		return PBPacker.message_to_string(data)
+		
+	func to_bytes() -> PackedByteArray:
+		return PBPacker.pack_message(data)
+		
+	func from_bytes(bytes : PackedByteArray, offset : int = 0, limit : int = -1) -> int:
+		var cur_limit = bytes.size()
+		if limit != -1:
+			cur_limit = limit
+		var result = PBPacker.unpack_message(data, bytes, offset, cur_limit)
+		if result == cur_limit:
+			if PBPacker.check_required(data):
+				if limit == -1:
+					return PB_ERR.NO_ERRORS
+			else:
+				return PB_ERR.REQUIRED_FIELDS
+		elif limit == -1 && result > 0:
+			return PB_ERR.PARSE_INCOMPLETE
+		return result
 	
-	var __msg: PBField
-	func has_msg() -> bool:
-		if __msg.value != null:
+class MyCharacter:
+	func _init():
+		var service
+		
+		__id = PBField.new("id", PB_DATA_TYPE.UINT32, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.UINT32])
+		service = PBServiceField.new()
+		service.field = __id
+		data[__id.tag] = service
+		
+		__nickname = PBField.new("nickname", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
+		service = PBServiceField.new()
+		service.field = __nickname
+		data[__nickname.tag] = service
+		
+		__level = PBField.new("level", PB_DATA_TYPE.UINT32, PB_RULE.OPTIONAL, 3, true, DEFAULT_VALUES_3[PB_DATA_TYPE.UINT32])
+		service = PBServiceField.new()
+		service.field = __level
+		data[__level.tag] = service
+		
+	var data = {}
+	
+	var __id: PBField
+	func has_id() -> bool:
+		if __id.value != null:
 			return true
 		return false
-	func get_msg() -> String:
-		return __msg.value
-	func clear_msg() -> void:
+	func get_id() -> int:
+		return __id.value
+	func clear_id() -> void:
+		data[1].state = PB_SERVICE_STATE.UNFILLED
+		__id.value = DEFAULT_VALUES_3[PB_DATA_TYPE.UINT32]
+	func set_id(value : int) -> void:
+		__id.value = value
+	
+	var __nickname: PBField
+	func has_nickname() -> bool:
+		if __nickname.value != null:
+			return true
+		return false
+	func get_nickname() -> String:
+		return __nickname.value
+	func clear_nickname() -> void:
 		data[2].state = PB_SERVICE_STATE.UNFILLED
-		__msg.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
-	func set_msg(value : String) -> void:
-		__msg.value = value
+		__nickname.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
+	func set_nickname(value : String) -> void:
+		__nickname.value = value
+	
+	var __level: PBField
+	func has_level() -> bool:
+		if __level.value != null:
+			return true
+		return false
+	func get_level() -> int:
+		return __level.value
+	func clear_level() -> void:
+		data[3].state = PB_SERVICE_STATE.UNFILLED
+		__level.value = DEFAULT_VALUES_3[PB_DATA_TYPE.UINT32]
+	func set_level(value : int) -> void:
+		__level.value = value
+	
+	func _to_string() -> String:
+		return PBPacker.message_to_string(data)
+		
+	func to_bytes() -> PackedByteArray:
+		return PBPacker.pack_message(data)
+		
+	func from_bytes(bytes : PackedByteArray, offset : int = 0, limit : int = -1) -> int:
+		var cur_limit = bytes.size()
+		if limit != -1:
+			cur_limit = limit
+		var result = PBPacker.unpack_message(data, bytes, offset, cur_limit)
+		if result == cur_limit:
+			if PBPacker.check_required(data):
+				if limit == -1:
+					return PB_ERR.NO_ERRORS
+			else:
+				return PB_ERR.REQUIRED_FIELDS
+		elif limit == -1 && result > 0:
+			return PB_ERR.PARSE_INCOMPLETE
+		return result
+	
+class MyCharactersListRes:
+	func _init():
+		var service
+		
+		var __characters_default: Array[MyCharacter] = []
+		__characters = PBField.new("characters", PB_DATA_TYPE.MESSAGE, PB_RULE.REPEATED, 1, true, __characters_default)
+		service = PBServiceField.new()
+		service.field = __characters
+		service.func_ref = Callable(self, "add_characters")
+		data[__characters.tag] = service
+		
+	var data = {}
+	
+	var __characters: PBField
+	func get_characters() -> Array[MyCharacter]:
+		return __characters.value
+	func clear_characters() -> void:
+		data[1].state = PB_SERVICE_STATE.UNFILLED
+		__characters.value.clear()
+	func add_characters() -> MyCharacter:
+		var element = MyCharacter.new()
+		__characters.value.append(element)
+		return element
+	
+	func _to_string() -> String:
+		return PBPacker.message_to_string(data)
+		
+	func to_bytes() -> PackedByteArray:
+		return PBPacker.pack_message(data)
+		
+	func from_bytes(bytes : PackedByteArray, offset : int = 0, limit : int = -1) -> int:
+		var cur_limit = bytes.size()
+		if limit != -1:
+			cur_limit = limit
+		var result = PBPacker.unpack_message(data, bytes, offset, cur_limit)
+		if result == cur_limit:
+			if PBPacker.check_required(data):
+				if limit == -1:
+					return PB_ERR.NO_ERRORS
+			else:
+				return PB_ERR.REQUIRED_FIELDS
+		elif limit == -1 && result > 0:
+			return PB_ERR.PARSE_INCOMPLETE
+		return result
+	
+class CharacterCreateReq:
+	func _init():
+		var service
+		
+		__nickname = PBField.new("nickname", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
+		service = PBServiceField.new()
+		service.field = __nickname
+		data[__nickname.tag] = service
+		
+	var data = {}
+	
+	var __nickname: PBField
+	func has_nickname() -> bool:
+		if __nickname.value != null:
+			return true
+		return false
+	func get_nickname() -> String:
+		return __nickname.value
+	func clear_nickname() -> void:
+		data[1].state = PB_SERVICE_STATE.UNFILLED
+		__nickname.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
+	func set_nickname(value : String) -> void:
+		__nickname.value = value
+	
+	func _to_string() -> String:
+		return PBPacker.message_to_string(data)
+		
+	func to_bytes() -> PackedByteArray:
+		return PBPacker.pack_message(data)
+		
+	func from_bytes(bytes : PackedByteArray, offset : int = 0, limit : int = -1) -> int:
+		var cur_limit = bytes.size()
+		if limit != -1:
+			cur_limit = limit
+		var result = PBPacker.unpack_message(data, bytes, offset, cur_limit)
+		if result == cur_limit:
+			if PBPacker.check_required(data):
+				if limit == -1:
+					return PB_ERR.NO_ERRORS
+			else:
+				return PB_ERR.REQUIRED_FIELDS
+		elif limit == -1 && result > 0:
+			return PB_ERR.PARSE_INCOMPLETE
+		return result
+	
+class CharacterCreateRes:
+	func _init():
+		var service
+		
+	var data = {}
+	
+	func _to_string() -> String:
+		return PBPacker.message_to_string(data)
+		
+	func to_bytes() -> PackedByteArray:
+		return PBPacker.pack_message(data)
+		
+	func from_bytes(bytes : PackedByteArray, offset : int = 0, limit : int = -1) -> int:
+		var cur_limit = bytes.size()
+		if limit != -1:
+			cur_limit = limit
+		var result = PBPacker.unpack_message(data, bytes, offset, cur_limit)
+		if result == cur_limit:
+			if PBPacker.check_required(data):
+				if limit == -1:
+					return PB_ERR.NO_ERRORS
+			else:
+				return PB_ERR.REQUIRED_FIELDS
+		elif limit == -1 && result > 0:
+			return PB_ERR.PARSE_INCOMPLETE
+		return result
+	
+class CharacterJoinReq:
+	func _init():
+		var service
+		
+		__id = PBField.new("id", PB_DATA_TYPE.UINT32, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.UINT32])
+		service = PBServiceField.new()
+		service.field = __id
+		data[__id.tag] = service
+		
+	var data = {}
+	
+	var __id: PBField
+	func has_id() -> bool:
+		if __id.value != null:
+			return true
+		return false
+	func get_id() -> int:
+		return __id.value
+	func clear_id() -> void:
+		data[1].state = PB_SERVICE_STATE.UNFILLED
+		__id.value = DEFAULT_VALUES_3[PB_DATA_TYPE.UINT32]
+	func set_id(value : int) -> void:
+		__id.value = value
+	
+	func _to_string() -> String:
+		return PBPacker.message_to_string(data)
+		
+	func to_bytes() -> PackedByteArray:
+		return PBPacker.pack_message(data)
+		
+	func from_bytes(bytes : PackedByteArray, offset : int = 0, limit : int = -1) -> int:
+		var cur_limit = bytes.size()
+		if limit != -1:
+			cur_limit = limit
+		var result = PBPacker.unpack_message(data, bytes, offset, cur_limit)
+		if result == cur_limit:
+			if PBPacker.check_required(data):
+				if limit == -1:
+					return PB_ERR.NO_ERRORS
+			else:
+				return PB_ERR.REQUIRED_FIELDS
+		elif limit == -1 && result > 0:
+			return PB_ERR.PARSE_INCOMPLETE
+		return result
+	
+class CharacterJoinRes:
+	func _init():
+		var service
+		
+	var data = {}
+	
+	func _to_string() -> String:
+		return PBPacker.message_to_string(data)
+		
+	func to_bytes() -> PackedByteArray:
+		return PBPacker.pack_message(data)
+		
+	func from_bytes(bytes : PackedByteArray, offset : int = 0, limit : int = -1) -> int:
+		var cur_limit = bytes.size()
+		if limit != -1:
+			cur_limit = limit
+		var result = PBPacker.unpack_message(data, bytes, offset, cur_limit)
+		if result == cur_limit:
+			if PBPacker.check_required(data):
+				if limit == -1:
+					return PB_ERR.NO_ERRORS
+			else:
+				return PB_ERR.REQUIRED_FIELDS
+		elif limit == -1 && result > 0:
+			return PB_ERR.PARSE_INCOMPLETE
+		return result
+	
+class CastSpellReq:
+	func _init():
+		var service
+		
+		__spell_id = PBField.new("spell_id", PB_DATA_TYPE.UINT32, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.UINT32])
+		service = PBServiceField.new()
+		service.field = __spell_id
+		data[__spell_id.tag] = service
+		
+		__target_id = PBField.new("target_id", PB_DATA_TYPE.UINT32, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.UINT32])
+		service = PBServiceField.new()
+		service.field = __target_id
+		data[__target_id.tag] = service
+		
+	var data = {}
+	
+	var __spell_id: PBField
+	func has_spell_id() -> bool:
+		if __spell_id.value != null:
+			return true
+		return false
+	func get_spell_id() -> int:
+		return __spell_id.value
+	func clear_spell_id() -> void:
+		data[1].state = PB_SERVICE_STATE.UNFILLED
+		__spell_id.value = DEFAULT_VALUES_3[PB_DATA_TYPE.UINT32]
+	func set_spell_id(value : int) -> void:
+		__spell_id.value = value
+	
+	var __target_id: PBField
+	func has_target_id() -> bool:
+		if __target_id.value != null:
+			return true
+		return false
+	func get_target_id() -> int:
+		return __target_id.value
+	func clear_target_id() -> void:
+		data[2].state = PB_SERVICE_STATE.UNFILLED
+		__target_id.value = DEFAULT_VALUES_3[PB_DATA_TYPE.UINT32]
+	func set_target_id(value : int) -> void:
+		__target_id.value = value
+	
+	func _to_string() -> String:
+		return PBPacker.message_to_string(data)
+		
+	func to_bytes() -> PackedByteArray:
+		return PBPacker.pack_message(data)
+		
+	func from_bytes(bytes : PackedByteArray, offset : int = 0, limit : int = -1) -> int:
+		var cur_limit = bytes.size()
+		if limit != -1:
+			cur_limit = limit
+		var result = PBPacker.unpack_message(data, bytes, offset, cur_limit)
+		if result == cur_limit:
+			if PBPacker.check_required(data):
+				if limit == -1:
+					return PB_ERR.NO_ERRORS
+			else:
+				return PB_ERR.REQUIRED_FIELDS
+		elif limit == -1 && result > 0:
+			return PB_ERR.PARSE_INCOMPLETE
+		return result
+	
+class CastSpellRes:
+	func _init():
+		var service
+		
+	var data = {}
 	
 	func _to_string() -> String:
 		return PBPacker.message_to_string(data)

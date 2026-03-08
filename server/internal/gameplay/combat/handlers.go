@@ -24,8 +24,8 @@ func (c *CastSpellHandler) Handle(rp session.ReceivedPacket) {
 		return
 	}
 
-	characters, _ := character.Characters(c.world)
-	spells, _ := Spells(c.world)
+	characters, _ := character.CharacterEntityMap(c.world)
+	spells, _ := SpellsMap(c.world)
 
 	payload := rp.Packet.Payload.(*protocol.Packet_CastSpellReq)
 

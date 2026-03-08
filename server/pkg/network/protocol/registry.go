@@ -12,6 +12,8 @@ const (
 	RegisterResPacketId
 	MyCharactersListReqPacketId
 	MyCharactersListResPacketId
+	CharacterCreateReqPacketId
+	CharacterCreateResPacketId
 	CharacterJoinReqPacketId
 	CharacterJoinResPacketId
 	CastSpellReqPacketId
@@ -31,6 +33,8 @@ var PacketRegistry = map[uint8]proto.Message{
 	RegisterResPacketId:         &RegisterRes{},
 	MyCharactersListReqPacketId: &MyCharactersListReq{},
 	MyCharactersListResPacketId: &MyCharactersListRes{},
+	CharacterCreateReqPacketId:  &CharacterCreateReq{},
+	CharacterCreateResPacketId:  &CharacterCreateReq{},
 	CharacterJoinReqPacketId:    &CharacterJoinReq{},
 	CharacterJoinResPacketId:    &CharacterJoinRes{},
 	CastSpellReqPacketId:        &CastSpellReq{},
@@ -86,6 +90,15 @@ func BuildCharacterJoinResPacket() *Packet {
 	}
 }
 
+func BuildCharacterCreateResPacket() *Packet {
+	return &Packet{
+		Id: uint32(CharacterCreateResPacketId),
+		Payload: &Packet_CharacterCreateRes{
+			CharacterCreateRes: &CharacterCreateRes{},
+		},
+	}
+}
+
 var PacketTypeRegistry = map[uint8]uint8{
 	ErrorResPacketId:            NoneBlockingPacketType,
 	LoginReqPacketId:            BlockingPacketType,
@@ -94,6 +107,8 @@ var PacketTypeRegistry = map[uint8]uint8{
 	RegisterResPacketId:         BlockingPacketType,
 	MyCharactersListReqPacketId: BlockingPacketType,
 	MyCharactersListResPacketId: BlockingPacketType,
+	CharacterCreateReqPacketId:  BlockingPacketType,
+	CharacterCreateResPacketId:  BlockingPacketType,
 	CharacterJoinReqPacketId:    BlockingPacketType,
 	CharacterJoinResPacketId:    BlockingPacketType,
 	CastSpellReqPacketId:        NoneBlockingPacketType,

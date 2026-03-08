@@ -12,6 +12,7 @@ import (
 	"github.com/rouzbehsbz/manticore/server/internal/gameplay/combat"
 	"github.com/rouzbehsbz/manticore/server/internal/gameplay/core"
 	"github.com/rouzbehsbz/manticore/server/internal/infra/db"
+	"github.com/rouzbehsbz/manticore/server/internal/infra/db/sources"
 	"github.com/rouzbehsbz/manticore/server/internal/models"
 	"github.com/rouzbehsbz/manticore/server/pkg/network"
 	"github.com/rouzbehsbz/manticore/server/pkg/network/protocol"
@@ -53,6 +54,7 @@ func main() {
 	dispatcher.Register(protocol.RegisterReqPacketId, account.NewRegisterHandler(db))
 	dispatcher.Register(protocol.LoginReqPacketId, account.NewLoginHandler(db))
 	dispatcher.Register(protocol.MyCharactersListReqPacketId, account.NewMyCharactersListHandler(db))
+	dispatcher.Register(protocol.CharacterCreateReqPacketId, account.NewCharacterCreateHandler(db))
 	dispatcher.Register(protocol.CharacterJoinReqPacketId, account.NewCharacterJoinHandler(db, world))
 	dispatcher.Register(protocol.CastSpellReqPacketId, combat.NewCastSpellHandler(world))
 
@@ -73,8 +75,15 @@ func main() {
 		zurvan.NewAddResourceCommand(server.SessionsManager),
 		zurvan.NewAddResourceCommand(server.SessionsManager.NonBlocking),
 		zurvan.NewAddResourceCommand(dispatcher),
+		zurvan.NewAddResourceCommand(util.NewSyncMap[uint32, sources.Character]()),
 		zurvan.NewAddResourceCommand(util.NewSyncMap[uint32, zurvan.Entity]()),
 		zurvan.NewAddResourceCommand(util.NewSyncMap[uint32, models.Spell]()),
+	)
+
+	world.AddSystems(
+		zurvan.BuildStageSystems(zurvan.StartupStage,
+			character.NewLoadSystem(db),
+		),
 	)
 
 	world.AddSystems(

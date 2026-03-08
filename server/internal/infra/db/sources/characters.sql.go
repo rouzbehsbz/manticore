@@ -9,6 +9,84 @@ import (
 	"context"
 )
 
+const createCharacter = `-- name: CreateCharacter :one
+INSERT INTO characters (
+    nickname,
+    vitality,
+    intelligence,
+    willpower,
+    dexterity,
+    spirit
+) VALUES (
+    $1,
+    $2,
+    $3,
+    $4,
+    $5,
+    $6
+)
+RETURNING id
+`
+
+type CreateCharacterParams struct {
+	Nickname     string
+	Vitality     int32
+	Intelligence int32
+	Willpower    int32
+	Dexterity    int32
+	Spirit       int32
+}
+
+func (q *Queries) CreateCharacter(ctx context.Context, arg CreateCharacterParams) (int32, error) {
+	row := q.db.QueryRow(ctx, createCharacter,
+		arg.Nickname,
+		arg.Vitality,
+		arg.Intelligence,
+		arg.Willpower,
+		arg.Dexterity,
+		arg.Spirit,
+	)
+	var id int32
+	err := row.Scan(&id)
+	return id, err
+}
+
+const getAllCharacters = `-- name: GetAllCharacters :many
+SELECT id, account_id, nickname, level, xp, vitality, intelligence, willpower, dexterity, spirit, created_at FROM characters
+`
+
+func (q *Queries) GetAllCharacters(ctx context.Context) ([]Character, error) {
+	rows, err := q.db.Query(ctx, getAllCharacters)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []Character
+	for rows.Next() {
+		var i Character
+		if err := rows.Scan(
+			&i.ID,
+			&i.AccountID,
+			&i.Nickname,
+			&i.Level,
+			&i.Xp,
+			&i.Vitality,
+			&i.Intelligence,
+			&i.Willpower,
+			&i.Dexterity,
+			&i.Spirit,
+			&i.CreatedAt,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const getCharacterById = `-- name: GetCharacterById :one
 SELECT id, account_id, nickname, level, xp, vitality, intelligence, willpower, dexterity, spirit, created_at FROM characters WHERE id = $1
 `

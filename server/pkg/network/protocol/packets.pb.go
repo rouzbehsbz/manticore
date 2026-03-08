@@ -33,6 +33,8 @@ type Packet struct {
 	//	*Packet_RegisterRes
 	//	*Packet_MyCharactersListReq
 	//	*Packet_MyCharactersListRes
+	//	*Packet_CharacterCreateReq
+	//	*Packet_CharacterCreateRes
 	//	*Packet_CharacterJoinReq
 	//	*Packet_CharacterJoinRes
 	//	*Packet_CastSpellReq
@@ -149,6 +151,24 @@ func (x *Packet) GetMyCharactersListRes() *MyCharactersListRes {
 	return nil
 }
 
+func (x *Packet) GetCharacterCreateReq() *CharacterCreateReq {
+	if x != nil {
+		if x, ok := x.Payload.(*Packet_CharacterCreateReq); ok {
+			return x.CharacterCreateReq
+		}
+	}
+	return nil
+}
+
+func (x *Packet) GetCharacterCreateRes() *CharacterCreateRes {
+	if x != nil {
+		if x, ok := x.Payload.(*Packet_CharacterCreateRes); ok {
+			return x.CharacterCreateRes
+		}
+	}
+	return nil
+}
+
 func (x *Packet) GetCharacterJoinReq() *CharacterJoinReq {
 	if x != nil {
 		if x, ok := x.Payload.(*Packet_CharacterJoinReq); ok {
@@ -217,20 +237,28 @@ type Packet_MyCharactersListRes struct {
 	MyCharactersListRes *MyCharactersListRes `protobuf:"bytes,8,opt,name=my_characters_list_res,json=myCharactersListRes,proto3,oneof"`
 }
 
+type Packet_CharacterCreateReq struct {
+	CharacterCreateReq *CharacterCreateReq `protobuf:"bytes,9,opt,name=character_create_req,json=characterCreateReq,proto3,oneof"`
+}
+
+type Packet_CharacterCreateRes struct {
+	CharacterCreateRes *CharacterCreateRes `protobuf:"bytes,10,opt,name=character_create_res,json=characterCreateRes,proto3,oneof"`
+}
+
 type Packet_CharacterJoinReq struct {
-	CharacterJoinReq *CharacterJoinReq `protobuf:"bytes,9,opt,name=character_join_req,json=characterJoinReq,proto3,oneof"`
+	CharacterJoinReq *CharacterJoinReq `protobuf:"bytes,11,opt,name=character_join_req,json=characterJoinReq,proto3,oneof"`
 }
 
 type Packet_CharacterJoinRes struct {
-	CharacterJoinRes *CharacterJoinRes `protobuf:"bytes,10,opt,name=character_join_res,json=characterJoinRes,proto3,oneof"`
+	CharacterJoinRes *CharacterJoinRes `protobuf:"bytes,12,opt,name=character_join_res,json=characterJoinRes,proto3,oneof"`
 }
 
 type Packet_CastSpellReq struct {
-	CastSpellReq *CastSpellReq `protobuf:"bytes,11,opt,name=cast_spell_req,json=castSpellReq,proto3,oneof"`
+	CastSpellReq *CastSpellReq `protobuf:"bytes,13,opt,name=cast_spell_req,json=castSpellReq,proto3,oneof"`
 }
 
 type Packet_CastSpellRes struct {
-	CastSpellRes *CastSpellRes `protobuf:"bytes,12,opt,name=cast_spell_res,json=castSpellRes,proto3,oneof"`
+	CastSpellRes *CastSpellRes `protobuf:"bytes,14,opt,name=cast_spell_res,json=castSpellRes,proto3,oneof"`
 }
 
 func (*Packet_ErrorRes) isPacket_Payload() {}
@@ -246,6 +274,10 @@ func (*Packet_RegisterRes) isPacket_Payload() {}
 func (*Packet_MyCharactersListReq) isPacket_Payload() {}
 
 func (*Packet_MyCharactersListRes) isPacket_Payload() {}
+
+func (*Packet_CharacterCreateReq) isPacket_Payload() {}
+
+func (*Packet_CharacterCreateRes) isPacket_Payload() {}
 
 func (*Packet_CharacterJoinReq) isPacket_Payload() {}
 
@@ -615,6 +647,86 @@ func (x *MyCharactersListRes) GetCharacters() []*MyCharacter {
 	return nil
 }
 
+type CharacterCreateReq struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Nickname      string                 `protobuf:"bytes,1,opt,name=nickname,proto3" json:"nickname,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CharacterCreateReq) Reset() {
+	*x = CharacterCreateReq{}
+	mi := &file_shared_packets_proto_msgTypes[9]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CharacterCreateReq) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CharacterCreateReq) ProtoMessage() {}
+
+func (x *CharacterCreateReq) ProtoReflect() protoreflect.Message {
+	mi := &file_shared_packets_proto_msgTypes[9]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CharacterCreateReq.ProtoReflect.Descriptor instead.
+func (*CharacterCreateReq) Descriptor() ([]byte, []int) {
+	return file_shared_packets_proto_rawDescGZIP(), []int{9}
+}
+
+func (x *CharacterCreateReq) GetNickname() string {
+	if x != nil {
+		return x.Nickname
+	}
+	return ""
+}
+
+type CharacterCreateRes struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CharacterCreateRes) Reset() {
+	*x = CharacterCreateRes{}
+	mi := &file_shared_packets_proto_msgTypes[10]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CharacterCreateRes) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CharacterCreateRes) ProtoMessage() {}
+
+func (x *CharacterCreateRes) ProtoReflect() protoreflect.Message {
+	mi := &file_shared_packets_proto_msgTypes[10]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CharacterCreateRes.ProtoReflect.Descriptor instead.
+func (*CharacterCreateRes) Descriptor() ([]byte, []int) {
+	return file_shared_packets_proto_rawDescGZIP(), []int{10}
+}
+
 type CharacterJoinReq struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Id            uint32                 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
@@ -624,7 +736,7 @@ type CharacterJoinReq struct {
 
 func (x *CharacterJoinReq) Reset() {
 	*x = CharacterJoinReq{}
-	mi := &file_shared_packets_proto_msgTypes[9]
+	mi := &file_shared_packets_proto_msgTypes[11]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -636,7 +748,7 @@ func (x *CharacterJoinReq) String() string {
 func (*CharacterJoinReq) ProtoMessage() {}
 
 func (x *CharacterJoinReq) ProtoReflect() protoreflect.Message {
-	mi := &file_shared_packets_proto_msgTypes[9]
+	mi := &file_shared_packets_proto_msgTypes[11]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -649,7 +761,7 @@ func (x *CharacterJoinReq) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CharacterJoinReq.ProtoReflect.Descriptor instead.
 func (*CharacterJoinReq) Descriptor() ([]byte, []int) {
-	return file_shared_packets_proto_rawDescGZIP(), []int{9}
+	return file_shared_packets_proto_rawDescGZIP(), []int{11}
 }
 
 func (x *CharacterJoinReq) GetId() uint32 {
@@ -667,7 +779,7 @@ type CharacterJoinRes struct {
 
 func (x *CharacterJoinRes) Reset() {
 	*x = CharacterJoinRes{}
-	mi := &file_shared_packets_proto_msgTypes[10]
+	mi := &file_shared_packets_proto_msgTypes[12]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -679,7 +791,7 @@ func (x *CharacterJoinRes) String() string {
 func (*CharacterJoinRes) ProtoMessage() {}
 
 func (x *CharacterJoinRes) ProtoReflect() protoreflect.Message {
-	mi := &file_shared_packets_proto_msgTypes[10]
+	mi := &file_shared_packets_proto_msgTypes[12]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -692,7 +804,7 @@ func (x *CharacterJoinRes) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CharacterJoinRes.ProtoReflect.Descriptor instead.
 func (*CharacterJoinRes) Descriptor() ([]byte, []int) {
-	return file_shared_packets_proto_rawDescGZIP(), []int{10}
+	return file_shared_packets_proto_rawDescGZIP(), []int{12}
 }
 
 type CastSpellReq struct {
@@ -705,7 +817,7 @@ type CastSpellReq struct {
 
 func (x *CastSpellReq) Reset() {
 	*x = CastSpellReq{}
-	mi := &file_shared_packets_proto_msgTypes[11]
+	mi := &file_shared_packets_proto_msgTypes[13]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -717,7 +829,7 @@ func (x *CastSpellReq) String() string {
 func (*CastSpellReq) ProtoMessage() {}
 
 func (x *CastSpellReq) ProtoReflect() protoreflect.Message {
-	mi := &file_shared_packets_proto_msgTypes[11]
+	mi := &file_shared_packets_proto_msgTypes[13]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -730,7 +842,7 @@ func (x *CastSpellReq) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CastSpellReq.ProtoReflect.Descriptor instead.
 func (*CastSpellReq) Descriptor() ([]byte, []int) {
-	return file_shared_packets_proto_rawDescGZIP(), []int{11}
+	return file_shared_packets_proto_rawDescGZIP(), []int{13}
 }
 
 func (x *CastSpellReq) GetSpellId() uint32 {
@@ -755,7 +867,7 @@ type CastSpellRes struct {
 
 func (x *CastSpellRes) Reset() {
 	*x = CastSpellRes{}
-	mi := &file_shared_packets_proto_msgTypes[12]
+	mi := &file_shared_packets_proto_msgTypes[14]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -767,7 +879,7 @@ func (x *CastSpellRes) String() string {
 func (*CastSpellRes) ProtoMessage() {}
 
 func (x *CastSpellRes) ProtoReflect() protoreflect.Message {
-	mi := &file_shared_packets_proto_msgTypes[12]
+	mi := &file_shared_packets_proto_msgTypes[14]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -780,14 +892,14 @@ func (x *CastSpellRes) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CastSpellRes.ProtoReflect.Descriptor instead.
 func (*CastSpellRes) Descriptor() ([]byte, []int) {
-	return file_shared_packets_proto_rawDescGZIP(), []int{12}
+	return file_shared_packets_proto_rawDescGZIP(), []int{14}
 }
 
 var File_shared_packets_proto protoreflect.FileDescriptor
 
 const file_shared_packets_proto_rawDesc = "" +
 	"\n" +
-	"\x14shared/packets.proto\"\x95\x05\n" +
+	"\x14shared/packets.proto\"\xa7\x06\n" +
 	"\x06Packet\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\rR\x02id\x12(\n" +
 	"\terror_res\x18\x02 \x01(\v2\t.ErrorResH\x00R\berrorRes\x12(\n" +
@@ -796,12 +908,14 @@ const file_shared_packets_proto_rawDesc = "" +
 	"\fregister_req\x18\x05 \x01(\v2\f.RegisterReqH\x00R\vregisterReq\x121\n" +
 	"\fregister_res\x18\x06 \x01(\v2\f.RegisterResH\x00R\vregisterRes\x12K\n" +
 	"\x16my_characters_list_req\x18\a \x01(\v2\x14.MyCharactersListReqH\x00R\x13myCharactersListReq\x12K\n" +
-	"\x16my_characters_list_res\x18\b \x01(\v2\x14.MyCharactersListResH\x00R\x13myCharactersListRes\x12A\n" +
-	"\x12character_join_req\x18\t \x01(\v2\x11.CharacterJoinReqH\x00R\x10characterJoinReq\x12A\n" +
-	"\x12character_join_res\x18\n" +
-	" \x01(\v2\x11.CharacterJoinResH\x00R\x10characterJoinRes\x125\n" +
-	"\x0ecast_spell_req\x18\v \x01(\v2\r.CastSpellReqH\x00R\fcastSpellReq\x125\n" +
-	"\x0ecast_spell_res\x18\f \x01(\v2\r.CastSpellResH\x00R\fcastSpellResB\t\n" +
+	"\x16my_characters_list_res\x18\b \x01(\v2\x14.MyCharactersListResH\x00R\x13myCharactersListRes\x12G\n" +
+	"\x14character_create_req\x18\t \x01(\v2\x13.CharacterCreateReqH\x00R\x12characterCreateReq\x12G\n" +
+	"\x14character_create_res\x18\n" +
+	" \x01(\v2\x13.CharacterCreateResH\x00R\x12characterCreateRes\x12A\n" +
+	"\x12character_join_req\x18\v \x01(\v2\x11.CharacterJoinReqH\x00R\x10characterJoinReq\x12A\n" +
+	"\x12character_join_res\x18\f \x01(\v2\x11.CharacterJoinResH\x00R\x10characterJoinRes\x125\n" +
+	"\x0ecast_spell_req\x18\r \x01(\v2\r.CastSpellReqH\x00R\fcastSpellReq\x125\n" +
+	"\x0ecast_spell_res\x18\x0e \x01(\v2\r.CastSpellResH\x00R\fcastSpellResB\t\n" +
 	"\apayload\"\x1c\n" +
 	"\bErrorRes\x12\x10\n" +
 	"\x03msg\x18\x01 \x01(\tR\x03msg\"B\n" +
@@ -822,7 +936,10 @@ const file_shared_packets_proto_rawDesc = "" +
 	"\x13MyCharactersListRes\x12,\n" +
 	"\n" +
 	"characters\x18\x01 \x03(\v2\f.MyCharacterR\n" +
-	"characters\"\"\n" +
+	"characters\"0\n" +
+	"\x12CharacterCreateReq\x12\x1a\n" +
+	"\bnickname\x18\x01 \x01(\tR\bnickname\"\x14\n" +
+	"\x12CharacterCreateRes\"\"\n" +
 	"\x10CharacterJoinReq\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\rR\x02id\"\x12\n" +
 	"\x10CharacterJoinRes\"F\n" +
@@ -843,7 +960,7 @@ func file_shared_packets_proto_rawDescGZIP() []byte {
 	return file_shared_packets_proto_rawDescData
 }
 
-var file_shared_packets_proto_msgTypes = make([]protoimpl.MessageInfo, 13)
+var file_shared_packets_proto_msgTypes = make([]protoimpl.MessageInfo, 15)
 var file_shared_packets_proto_goTypes = []any{
 	(*Packet)(nil),              // 0: Packet
 	(*ErrorRes)(nil),            // 1: ErrorRes
@@ -854,10 +971,12 @@ var file_shared_packets_proto_goTypes = []any{
 	(*MyCharactersListReq)(nil), // 6: MyCharactersListReq
 	(*MyCharacter)(nil),         // 7: MyCharacter
 	(*MyCharactersListRes)(nil), // 8: MyCharactersListRes
-	(*CharacterJoinReq)(nil),    // 9: CharacterJoinReq
-	(*CharacterJoinRes)(nil),    // 10: CharacterJoinRes
-	(*CastSpellReq)(nil),        // 11: CastSpellReq
-	(*CastSpellRes)(nil),        // 12: CastSpellRes
+	(*CharacterCreateReq)(nil),  // 9: CharacterCreateReq
+	(*CharacterCreateRes)(nil),  // 10: CharacterCreateRes
+	(*CharacterJoinReq)(nil),    // 11: CharacterJoinReq
+	(*CharacterJoinRes)(nil),    // 12: CharacterJoinRes
+	(*CastSpellReq)(nil),        // 13: CastSpellReq
+	(*CastSpellRes)(nil),        // 14: CastSpellRes
 }
 var file_shared_packets_proto_depIdxs = []int32{
 	1,  // 0: Packet.error_res:type_name -> ErrorRes
@@ -867,16 +986,18 @@ var file_shared_packets_proto_depIdxs = []int32{
 	5,  // 4: Packet.register_res:type_name -> RegisterRes
 	6,  // 5: Packet.my_characters_list_req:type_name -> MyCharactersListReq
 	8,  // 6: Packet.my_characters_list_res:type_name -> MyCharactersListRes
-	9,  // 7: Packet.character_join_req:type_name -> CharacterJoinReq
-	10, // 8: Packet.character_join_res:type_name -> CharacterJoinRes
-	11, // 9: Packet.cast_spell_req:type_name -> CastSpellReq
-	12, // 10: Packet.cast_spell_res:type_name -> CastSpellRes
-	7,  // 11: MyCharactersListRes.characters:type_name -> MyCharacter
-	12, // [12:12] is the sub-list for method output_type
-	12, // [12:12] is the sub-list for method input_type
-	12, // [12:12] is the sub-list for extension type_name
-	12, // [12:12] is the sub-list for extension extendee
-	0,  // [0:12] is the sub-list for field type_name
+	9,  // 7: Packet.character_create_req:type_name -> CharacterCreateReq
+	10, // 8: Packet.character_create_res:type_name -> CharacterCreateRes
+	11, // 9: Packet.character_join_req:type_name -> CharacterJoinReq
+	12, // 10: Packet.character_join_res:type_name -> CharacterJoinRes
+	13, // 11: Packet.cast_spell_req:type_name -> CastSpellReq
+	14, // 12: Packet.cast_spell_res:type_name -> CastSpellRes
+	7,  // 13: MyCharactersListRes.characters:type_name -> MyCharacter
+	14, // [14:14] is the sub-list for method output_type
+	14, // [14:14] is the sub-list for method input_type
+	14, // [14:14] is the sub-list for extension type_name
+	14, // [14:14] is the sub-list for extension extendee
+	0,  // [0:14] is the sub-list for field type_name
 }
 
 func init() { file_shared_packets_proto_init() }
@@ -892,6 +1013,8 @@ func file_shared_packets_proto_init() {
 		(*Packet_RegisterRes)(nil),
 		(*Packet_MyCharactersListReq)(nil),
 		(*Packet_MyCharactersListRes)(nil),
+		(*Packet_CharacterCreateReq)(nil),
+		(*Packet_CharacterCreateRes)(nil),
 		(*Packet_CharacterJoinReq)(nil),
 		(*Packet_CharacterJoinRes)(nil),
 		(*Packet_CastSpellReq)(nil),
@@ -903,7 +1026,7 @@ func file_shared_packets_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_shared_packets_proto_rawDesc), len(file_shared_packets_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   13,
+			NumMessages:   15,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

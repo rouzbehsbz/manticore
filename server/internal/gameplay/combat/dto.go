@@ -8,7 +8,7 @@ import (
 	"github.com/rouzbehsbz/zurvan"
 )
 
-func Spells(w *zurvan.World) (*util.SyncMap[uint32, models.Spell], bool) {
+func SpellsMap(w *zurvan.World) (*util.SyncMap[uint32, models.Spell], bool) {
 	return zurvan.Resource[*util.SyncMap[uint32, models.Spell]](w)
 }
 

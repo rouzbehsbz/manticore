@@ -12,10 +12,12 @@ message Packet {
     RegisterRes register_res = 6;
     MyCharactersListReq my_characters_list_req = 7;
     MyCharactersListRes my_characters_list_res = 8;
-    CharacterJoinReq character_join_req = 9;
-    CharacterJoinRes character_join_res = 10;
-    CastSpellReq cast_spell_req = 11;
-    CastSpellRes cast_spell_res = 12;
+    CharacterCreateReq character_create_req = 9;
+    CharacterCreateRes character_create_res = 10;
+    CharacterJoinReq character_join_req = 11;
+    CharacterJoinRes character_join_res = 12;
+    CastSpellReq cast_spell_req = 13;
+    CastSpellRes cast_spell_res = 14;
   }
 }
 
@@ -27,7 +29,7 @@ message LoginReq {
   string username = 1;
   string password = 2;
 }
-message LoginRes {};
+message LoginRes {}
 
 message RegisterReq {
   string username = 1;
@@ -44,6 +46,11 @@ message MyCharacter {
 message MyCharactersListRes {
     repeated MyCharacter characters = 1;
 }
+
+message CharacterCreateReq {
+    string nickname = 1;
+}
+message CharacterCreateRes {}
 
 message CharacterJoinReq {
     uint32 id = 1;
